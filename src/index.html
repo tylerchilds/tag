@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <title>Tag</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style type="text/css">
+    body {
+      line-height: 1.5;
+      max-width: 45rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    h2 {
+      margin-top: 5rem;
+    }
+
+    h3 {
+      margin-top: 3rem;
+    }
+
+    nav {
+      border-top: 1px dashed black;
+      border-bottom: 1px dashed black;
+      padding: 1rem;
+      margin: 3rem 0;
+      font-style: italic;
+    }
+
+    pre {
+      padding: 1rem 2rem;
+      border: 1px dashed black;
+      margin-bottom: 2rem;
+    }
+
+    dt {
+      font-weight: bold;
+    }
+
+    dd {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <center>
+    <h1>Tag</h1>
+    <p>
+      Write complex JavaScript applications without complexity.
+    </p>
+
+    <a href="./tag.zip">
+      Download
+    </a>
+
+    <nav>
+      View <a href="#usage">Usage</a> and
+      <a href="#documentation">Documenation</a>
+    </nav>
+  </center>
+	
+  <a name="usage"></a>
+	<h2>Usage</h2>
+  <p>
+    To get started quickly, import <code>tag.js</code> into a JavaScript module.
+  </p>
+<pre><xmp>import tag from './tag.js'</xmp></pre>
+
+  <p>
+  <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
+  </p>
+
+
+  <h3>Hello World</h3>
+	<p>
+		Hello World shows how to add custom text to a custom tag.
+		(<a href="./hello-world.html">View Demo</a>)
+	</p>
+	<pre><xmp><!-- hello-world.html -->
+<hello-world></hello-world>
+
+<script type="module">
+  // import the tag library
+  import tag from './tag.js'
+
+  // create a new tag called hello-world
+  const element = tag('hello-world')
+
+  // set the contents of the tag
+  element.html(() => `Hello World`)
+</script></xmp></pre>
+
+  <h3>Hello Name</h3>
+	<p>
+		The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
+		(<a href="./hello-name.html">View Demo</a>)
+	</p>
+
+<pre><xmp><!-- hello-name.html -->
+<hello-name></hello-name>
+
+<script type="module">
+  // import the tag library
+  import tag from './tag.js'
+
+  // create a new tag called hello-name
+  // and set the initial state
+  const { html, get } = tag('hello-name', {
+    'name': 'Earth'
+  })
+
+  html(() => {
+    // get the name from current state
+    const { name } = get()
+
+    // interpolate the name variable into tag content
+    return `Hello ${name}`
+  })
+</script></xmp></pre>
+
+  
+	<h4>More Examples</h4>
+	<p>
+    The best way to learn how tag works is by exploring more complex demos.
+	</p>
+	<dl>
+		<dt>Hello Nickname (<a href="./hello-nickname.html">View Demo</a>)</dt>
+		<dd>
+			Demonstrates local two-way data binding and persisting updates across page reloads.
+		</dd>
+		<dt>Hello Universe (<a href="./hello-universe.html">View Demo</a>)</dt>
+		<dd>
+			An application for managing planet information and viewing a sequential representation of our solar system.
+		</dd>
+	</dl>
+
+  <a name="documentation"></a>
+	<h2>Documentation</h2>
+  <strong>tag(string [, object]) : object</strong>
+  <p>
+    The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state. It will return an object with the following namespaced functions.
+	</p>
+	<dl>
+		<dt>html(function(target))</dt>
+		<dd>
+			Expects a function that returns HTML as a string to be rendered into the tag. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
+		</dd>
+		<dt>css(string)</dt>
+		<dd>
+			Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
+		</dd>
+		<dt>on(string, string, function(event)) : function</dt>
+		<dd>
+			An event delegator that expects three arguments. An event type, a css selector, and a handler. Returns a function to remove the listener when invoked.
+		</dd>
+		<dt>get() : object</dt>
+		<dd>
+			Returns the current state.
+		</dd>
+		<dt>set(object [, function(state, payload)])</dt>
+		<dd>
+			Updates the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload provided as the required first argument.
+		</dd>
+	</dl>
+
+	<h2>Dependencies</h2>
+	<p>
+		There is one third-party dependency, <a href="https://diffhtml.org/">diffHTML</a>.
+	</p>
+
+  <h2>About the Author</h2>
+  <p>
+    <a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
+  </p>
+
+  <p>
+    Previously, he built <a href="https://cutestrap.com">Cutestrap</a>.
+  </p>
+
+  <p>
+    You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
+  </p>
+
+  <h2>Source Code</h2>
+  <p>
+    Available on
+    <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
+    under the MIT license.
+  </p>
+
+</body>
+
+</html>

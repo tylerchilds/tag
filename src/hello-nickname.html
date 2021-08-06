@@ -1,0 +1,53 @@
+<hello-nickname></hello-nickname>
+
+<script type="module">
+  import tag from './tag.js'
+
+  const {
+    html,
+    get,
+    on,
+    set,
+    css
+  } = tag('hello-nickname', {
+    'nickname': 'Earthling'
+  })
+
+  html(() => {
+    const { nickname } = get()
+
+    return `
+      <demo>
+        Hello ${nickname}
+      </demo>
+      <form>
+        Change Nickname: 
+        <input value="${nickname}" type="text" />
+      </form>
+    `
+  })
+
+  on('keyup', 'input', event => {
+    const nickname = event.target.value;
+    set({ nickname })
+  })
+
+  css(`
+    & {
+      display: block;
+      margin: 0 auto;
+      max-width: 500px;
+    }
+
+    & demo {
+      display: block;
+      padding: 1rem;
+    }
+
+    & form {
+      border-top: 1px dashed slategrey;
+      font-style: italic;
+      padding: 1rem;
+    }
+  `)
+</script>
