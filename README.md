@@ -2,7 +2,7 @@
 
 Write complex JavaScript applications without complexity.
 
-[Website](https://thelanding.page)
+[Website](https://thelanding.page/tag)
 
 ## Contributing
 
