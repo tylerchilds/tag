@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style type="text/css">
+    html {
+      background: oldlace;
+    }
     body {
       line-height: 1.5;
       max-width: 45rem;
@@ -31,9 +34,23 @@
     }
 
     pre {
-      padding: 1rem 2rem;
+      background: papayawhip;
       border: 1px dashed black;
+      padding: 1rem 2rem;
       margin-bottom: 2rem;
+    }
+
+    code {
+      background: papayawhip;
+      display: inline-block;
+      font-size: 1em;
+      margin: 0 .5rem;
+      padding: 2px .5rem;
+      position: relative;
+    }
+
+    dt code {
+      margin-left: -.5rem;
     }
 
     dt {
@@ -48,7 +65,7 @@
 
 <body>
   <center>
-    <h1>Tag</h1>
+    <h1><code>&lt;tag&gt;</code></h1>
     <p>
       Write complex JavaScript applications without complexity.
     </p>
@@ -122,7 +139,7 @@
   })
 </script></xmp></pre>
 
-  
+
 	<h4>More Examples</h4>
 	<p>
     The best way to learn how tag works is by exploring more complex demos.
@@ -145,23 +162,23 @@
     The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state. It will return an object with the following namespaced functions.
 	</p>
 	<dl>
-		<dt>html(function(target))</dt>
+    <dt><code>html(function(target))</code></dt>
 		<dd>
 			Expects a function that returns HTML as a string to be rendered into the tag. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
 		</dd>
-		<dt>css(string)</dt>
+    <dt><code>css(string)</code></dt>
 		<dd>
 			Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
 		</dd>
-		<dt>on(string, string, function(event)) : function</dt>
+		<dt><code>on(string, string, function(event)) : function</code></dt>
 		<dd>
 			An event delegator that expects three arguments. An event type, a css selector, and a handler. Returns a function to remove the listener when invoked.
 		</dd>
-		<dt>get() : object</dt>
+		<dt><code>get() : object</code></dt>
 		<dd>
 			Returns the current state.
 		</dd>
-		<dt>set(object [, function(state, payload)])</dt>
+		<dt><code>set(object [, function(state, payload)])</code></dt>
 		<dd>
 			Updates the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload provided as the required first argument.
 		</dd>
@@ -185,12 +202,43 @@
     You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
   </p>
 
+  <h3>Inspirations</h3>
+  <p>
+    Inspiring people building inspiring projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
+  </p>
+  <ul>
+    <li>
+      <a href="https://small-tech.org">Small Technology Foundation</a>
+    </li>
+    <li>
+      <a href="https://solidproject.org/">Solid Project</a>
+    </li>
+    <li>
+      <a href="https://spritelyproject.org/">Spritely Project</a>
+    </li>
+    <li>
+      <a href="https://100r.co">Hundredrabbits</a>
+    </li>
+    <li>
+      <a href="https://safenetwork.tech/">Safe Network</a>
+    </li>
+    <li>
+      <a href="https://owncast.online/">Owncast</a>
+    </li>
+  </ul>
+
   <h2>Source Code</h2>
   <p>
     Available on
     <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
     under the MIT license.
   </p>
+
+  <footer>
+    <center style="font-style: italic; color: grey;">
+      Last updated: 2021/08/06 (YYYY/MM/DD)
+    </center>
+  </footer>
 
 </body>
 
