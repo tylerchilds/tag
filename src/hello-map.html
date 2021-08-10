@@ -1,0 +1,76 @@
+<!-- hello-map.html -->
+<head>
+  <script src="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css" rel="stylesheet" />
+</head>
+
+<hello-map></hello-map>
+
+<script type="module">
+  import tag from './tag.js'
+
+  const { html, css, get, set } = tag('hello-map')
+
+  html(target => {
+    target.map
+      ? update(target.map)
+      : initialize(target)
+  })
+
+  function initialize(target) {
+    const container = document.createElement('div')
+    container.classList.add('map')
+    target.appendChild(container)
+
+    target.map = new maplibregl.Map({
+      container,
+      style:
+      'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+      zoom: 0
+    })
+
+    target.map.on('load', () => load(target.map))
+  }
+
+  function load(map) {
+    const url = 'https://wanderdrone.appspot.com/'
+    setInterval(() => pollDrone(url), 2000)
+
+    map.addSource('drone', { type: 'geojson', data: url })
+
+    map.addLayer({
+      'id': 'drone',
+      'type': 'symbol',
+      'source': 'drone',
+      'layout': {
+        'icon-image': 'rocket_15'
+      }
+    }) 
+  }
+
+  async function pollDrone(url) {
+    const drone = await fetch(url)
+      .then(data => data.json())
+      .catch(console.error)
+
+    set({ drone })
+  }
+
+  function update(map) {
+    const { drone } = get()
+
+    map.getSource('drone').setData(drone)
+    map.flyTo({
+      center: drone.geometry.coordinates,
+      speed: .5
+    })
+  }
+
+  css(`
+    body { margin: 0; padding: 0; }
+
+    & .map {
+     position: absolute; top: 0; bottom: 0; width: 100%;
+    }
+  `)
+</script>
