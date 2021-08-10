@@ -86,9 +86,15 @@ html {
 
     <a name="documentation"></a>
     <h2>Documentation</h2>
+    <p>
+      Tag is a JavaScript library for rendering, scoped styles, event delegation, and state management.
+    </p>
     <strong>tag(string [, object]) : object</strong>
     <p>
-    The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state. It will return an object with the following namespaced functions.
+      The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state.
+    </p>
+    <p>
+     It will return an object with the following namespaced functions.
     </p>
     <dl>
       <dt><code>html(function(target: EventTarget))</code></dt>
@@ -109,7 +115,7 @@ html {
       </dd>
       <dt><code>set(payload [, function(state, payload)])</code></dt>
       <dd>
-      Updates the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload provided as the required first argument.
+      Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
       </dd>
     </dl>
 
@@ -149,7 +155,6 @@ html {
 <h3><code>&lt;hello-name&gt;</code> <a href="./hello-name.html">View Demo</a></h3>
 <p>
 The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
-()
 </p>
 
 <pre><xmp><!-- hello-name.html -->
