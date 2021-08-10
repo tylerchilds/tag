@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="">
-<head>
-  <meta charset="utf-8">
-  <title>Tag</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8">
+    <title>Tag</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style type="text/css">
-    html {
-      background: oldlace;
-    }
+    <style type="text/css">
+html {
+  background: oldlace;
+}
     body {
       line-height: 1.5;
       max-width: 45rem;
@@ -63,76 +63,76 @@
     dd {
       margin-bottom: 2rem;
     }
-  </style>
-</head>
+    </style>
+  </head>
 
-<body>
-  <center>
-    <h1><code>&lt;tag&gt;</code></h1>
-    <p>
+  <body>
+    <center>
+      <h1><code>&lt;tag&gt;</code></h1>
+      <p>
       Write complex JavaScript applications without complexity.
+      </p>
+
+      <a href="./tag.zip">
+        Download
+      </a>
+
+      <nav>
+        View <a href="#documentation">Documentation</a>
+        and <a href="#usage">Usage</a>.
+        Or learn <a href="#author">about the author</a>.
+      </nav>
+    </center>
+
+    <a name="documentation"></a>
+    <h2>Documentation</h2>
+    <strong>tag(string [, object]) : object</strong>
+    <p>
+    The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state. It will return an object with the following namespaced functions.
+    </p>
+    <dl>
+      <dt><code>html(function(target: EventTarget))</code></dt>
+      <dd>
+      Expects a function that returns HTML as a string to be rendered into the tag. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
+      </dd>
+      <dt><code>css(stylesheet: string)</code></dt>
+      <dd>
+      Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
+      </dd>
+      <dt><code>on(eventType, selector, function(event)) : function</code></dt>
+      <dd>
+      An event delegator that expects three arguments. An event type, a css selector, and a handler. Returns a function to remove the listener when invoked.
+      </dd>
+      <dt><code>get() : object</code></dt>
+      <dd>
+      Returns the current state.
+      </dd>
+      <dt><code>set(payload [, function(state, payload)])</code></dt>
+      <dd>
+      Updates the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload provided as the required first argument.
+      </dd>
+    </dl>
+
+    <hr />
+
+    <a name="usage"></a>
+    <h2>Usage</h2>
+    <p>
+    To get started quickly, import <code>tag.js</code> into a JavaScript module.
+    </p>
+    <pre><xmp>import tag from './tag.js'</xmp></pre>
+
+    <p>
+    <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
     </p>
 
-    <a href="./tag.zip">
-      Download
-    </a>
 
-    <nav>
-      View <a href="#documentation">Documentation</a>
-      and <a href="#usage">Usage</a>.
-      Or learn <a href="#author">about the author</a>.
-    </nav>
-  </center>
-	
-  <a name="documentation"></a>
-	<h2>Documentation</h2>
-  <strong>tag(string [, object]) : object</strong>
-  <p>
-    The <code>tag</code> function requires a string to be used as a custom HTML tag. An optional second argument may be passed for seeding the initial state. It will return an object with the following namespaced functions.
-	</p>
-	<dl>
-    <dt><code>html(function(target: EventTarget))</code></dt>
-		<dd>
-			Expects a function that returns HTML as a string to be rendered into the tag. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
-		</dd>
-    <dt><code>css(stylesheet: string)</code></dt>
-		<dd>
-			Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
-		</dd>
-		<dt><code>on(eventType, selector, function(event)) : function</code></dt>
-		<dd>
-			An event delegator that expects three arguments. An event type, a css selector, and a handler. Returns a function to remove the listener when invoked.
-		</dd>
-		<dt><code>get() : object</code></dt>
-		<dd>
-			Returns the current state.
-		</dd>
-		<dt><code>set(payload [, function(state, payload)])</code></dt>
-		<dd>
-			Updates the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload provided as the required first argument.
-		</dd>
-	</dl>
+    <h3><code>&lt;hello-world&gt;</code> <a href="./hello-world.html">View Demo</a></h3>
+    <p>
+    Hello World shows how to add custom text to a custom tag.
 
-  <hr />
-
-  <a name="usage"></a>
-	<h2>Usage</h2>
-  <p>
-    To get started quickly, import <code>tag.js</code> into a JavaScript module.
-  </p>
-<pre><xmp>import tag from './tag.js'</xmp></pre>
-
-  <p>
-  <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
-  </p>
-
-
-  <h3><code>&lt;hello-world&gt;</code> <a href="./hello-world.html">View Demo</a></h3>
-	<p>
-		Hello World shows how to add custom text to a custom tag.
-		
-	</p>
-	<pre><xmp><!-- hello-world.html -->
+    </p>
+    <pre><xmp><!-- hello-world.html -->
 <hello-world></hello-world>
 
 <script type="module">
@@ -146,11 +146,11 @@
   element.html(() => `Hello World`)
 </script></xmp></pre>
 
-  <h3><code>&lt;hello-name&gt;</code> <a href="./hello-name.html">View Demo</a></h3>
-	<p>
-		The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
-		()
-	</p>
+<h3><code>&lt;hello-name&gt;</code> <a href="./hello-name.html">View Demo</a></h3>
+<p>
+The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
+()
+</p>
 
 <pre><xmp><!-- hello-name.html -->
 <hello-name></hello-name>
@@ -175,77 +175,81 @@
 </script></xmp></pre>
 
 
-	<h4>More Examples</h4>
-	<dl>
-    <dt><code>&lt;hello-nickname&gt;</code> <a href="./hello-nickname.html">View Demo</a></dt>
-		<dd>
-			Demonstrates local two-way data binding and persisting updates across page reloads.
-		</dd>
-    <dt><code>&lt;hello-universe&gt;</code> <a href="./hello-universe.html">View Demo</a></dt>
-		<dd>
-			An application for managing planet information and viewing a sequential representation of our solar system.
-		</dd>
-	</dl>
+<h4>More Examples</h4>
+<dl>
+  <dt><code>&lt;hello-nickname&gt;</code> <a href="./hello-nickname.html">View Demo</a></dt>
+  <dd>
+  Demonstrates local two-way data binding and persisting updates across page reloads.
+  </dd>
+  <dt><code>&lt;hello-universe&gt;</code> <a href="./hello-universe.html">View Demo</a></dt>
+  <dd>
+  An application for managing planet information and viewing a sequential representation of our solar system.
+  </dd>
+  <dt><code>&lt;hello-gallery&gt;</code> <a href="./hello-gallery.html">View Demo</a></dt>
+  <dd>
+  A static photo gallery that upgrades to a carousel with progressive enhancement.
+  </dd>
+</dl>
 
-	<h2>Dependencies</h2>
-	<p>
-		There is one third-party dependency, <a href="https://diffhtml.org/">diffHTML</a>.
-	</p>
+<h2>Dependencies</h2>
+<p>
+There is one third-party dependency, <a href="https://diffhtml.org/">diffHTML</a>.
+</p>
 
-  <hr />
+<hr />
 
-  <a name="author"></a>
-  <h2>About the Author</h2>
-  <p>
-    <a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
-  </p>
+<a name="author"></a>
+<h2>About the Author</h2>
+<p>
+<a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
+</p>
 
-  <p>
-    Previously, he built <a href="https://cutestrap.com">Cutestrap</a>.
-  </p>
+<p>
+Previously, he built <a href="https://cutestrap.com">Cutestrap</a>.
+</p>
 
-  <p>
-    You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
-  </p>
+<p>
+You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
+</p>
 
-  <h3>Inspirations</h3>
-  <p>
-    Inspiring people building inspiring projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
-  </p>
-  <ul>
-    <li>
-      <a href="https://small-tech.org">Small Technology Foundation</a>
-    </li>
-    <li>
-      <a href="https://solidproject.org/">Solid Project</a>
-    </li>
-    <li>
-      <a href="https://spritelyproject.org/">Spritely Project</a>
-    </li>
-    <li>
-      <a href="https://100r.co">Hundredrabbits</a>
-    </li>
-    <li>
-      <a href="https://safenetwork.tech/">Safe Network</a>
-    </li>
-    <li>
-      <a href="https://owncast.online/">Owncast</a>
-    </li>
-  </ul>
+<h3>Inspirations</h3>
+<p>
+Inspiring people building inspiring projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
+</p>
+<ul>
+  <li>
+    <a href="https://small-tech.org">Small Technology Foundation</a>
+  </li>
+  <li>
+    <a href="https://solidproject.org/">Solid Project</a>
+  </li>
+  <li>
+    <a href="https://spritelyproject.org/">Spritely Project</a>
+  </li>
+  <li>
+    <a href="https://100r.co">Hundredrabbits</a>
+  </li>
+  <li>
+    <a href="https://safenetwork.tech/">Safe Network</a>
+  </li>
+  <li>
+    <a href="https://owncast.online/">Owncast</a>
+  </li>
+</ul>
 
-  <h2>Source Code</h2>
-  <p>
-    Available on
-    <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
-    under the MIT license.
-  </p>
+<h2>Source Code</h2>
+<p>
+Available on
+<a href="https://git.thelanding.page/tlp/tag">Gitea</a>
+under the MIT license.
+</p>
 
-  <footer>
-    <center style="font-style: italic; color: grey;">
-      Last updated: 2021/08/09 (YYYY/MM/DD)
-    </center>
-  </footer>
+<footer>
+  <center style="font-style: italic; color: grey;">
+    Last updated: 2021/08/09 (YYYY/MM/DD)
+  </center>
+</footer>
 
-</body>
+  </body>
 
 </html>

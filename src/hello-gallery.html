@@ -1,0 +1,110 @@
+<hello-gallery>
+  <img src="https://www.fillmurray.com/600/400" alt="Bill Murray" />
+  <img src="https://www.fillmurray.com/650/400" alt="Bill" />
+  <img src="https://www.fillmurray.com/600/450" alt="Murray" />
+  <img src="https://www.fillmurray.com/650/450" alt="Fill Murray" />
+</hello-gallery>
+
+<script type="module">
+  import tag from './tag.js'
+
+  const emptyGallery = {
+    images: [],
+    position: 0
+  }
+
+  const {
+    html,
+    get,
+    on,
+    set,
+    css
+  } = tag('hello-gallery')
+
+  const galleryById = (id) => {
+    return get()[id] || emptyGallery
+  }
+
+  html((target) => {
+    const { id } = target
+    const { images, position } = galleryById(id)
+
+    const gallery = images.map((img, i) => `
+      <figure class="${i === position ? 'active' : ''}">
+        <img src="${img.src}" alt="${img.alt}" />
+        <figcaption>${img.alt}</figcaption>
+      </figure>
+    `).join('')
+
+    return `
+      <button class="back" data-id="${id}">
+        Back
+      </button>
+      <button class="next" data-id="${id}">
+        Next
+      </button>
+      ${gallery}
+    `
+  })
+
+  on('click', '.back', step(-1))
+  on('click', '.next', step(+1))
+
+  css(`
+    & {
+      display: block;
+    }
+
+    & figure {
+      display: none;
+    }
+
+    & .active {
+      display: block;
+    }
+  `)
+
+  function mod(n, m) {
+    return ((n % m) + m) % m;
+  }
+
+  function step(i) {
+    return event => {
+      const { id } = event.target.dataset
+      const { images, position } = galleryById(id)
+
+      const index = mod((position + i), images.length)
+
+      set({
+        id,
+        position: index
+      }, merge)
+    }
+  }
+
+  function merge(state, payload) {
+    const { id } = payload
+    const gallery = state[id] || emptyGallery
+
+    return {
+      ...state,
+      [id]: {
+        ...gallery,
+        ...payload
+      }
+    }
+  }
+
+  function load(target) {
+    const { id } = target
+    const images = [...target.children]
+      .filter(x => x.matches('img'))
+      .map(img => ({ src: img.src, alt: img.alt }));
+
+    if(images.length > 0) {
+      set({ id, images }, merge)
+    }
+  }
+
+  [...document.querySelectorAll('hello-gallery')].map(load)
+</script>
