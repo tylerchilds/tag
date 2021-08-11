@@ -1,0 +1,197 @@
+<!-- hello-reddit.html -->
+
+<div style="
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 10px;
+">
+  <div>
+    <hello-reddit title="r/all" id="reddit-1"></hello-reddit>
+  </div>
+  <div>
+    <hello-reddit title="r/funny" id="reddit-2"
+      r="funny"></hello-reddit>
+  </div>
+  <div>
+    <hello-reddit title="r/aww (controversial)" id="reddit-3"
+      r="aww" sort="controversial"></hello-reddit>
+  </div>
+  <div>
+    <hello-reddit title="Interesting Things" id="reddit-4"
+      r="Damnthatsinteresting+interestingasfuck+nextfuckinglevel"
+      sort="hot"></hello-reddit>
+  </div>
+  <div>
+    <hello-reddit title="News and Such" id="reddit-5"
+      r="news+worldnews+politics"
+      sort="top"></hello-reddit>
+  </div>
+</div>
+
+<script type="module">
+  import tag from './tag.js'
+
+  const emptyReddit = {
+    chilren: [],
+    after: "",
+    before: ""
+  }
+
+  const { html, css, set, get, on } = tag('hello-reddit')
+
+  function redditById(id) {
+    return get()[id] || emptyReddit
+  }
+
+  on('click', '.reset', paginate('reset'))
+  on('click', '.more', paginate('after'))
+
+  html(target => {
+    const title = target.getAttribute('title') || 'Untitled'
+    const { children = [], loading } = query(target)
+
+    const list = children
+      .map(({ data }) => `
+        <li>
+          ${renderPost(data)}
+        </li>
+      `)
+      .join("")
+
+    return `
+      <h2>${title}</h2>
+      <button class="reset" data-id="${target.id}">Reset</button>
+      <button class="more" data-id="${target.id}">Go Deeper</button>
+      <ol class="${loading ? 'loading' : ''}">
+        ${list}
+      </ol>
+    `
+  })
+
+  function renderPost(data) {
+    const renderers = {
+      'image': (data) => `
+        <details>
+          <summary>
+            <a href="${data.url}">${data.title}</a>
+            (<a href="https://old.reddit.com${data.permalink}">Permalink</a>)
+          </summary>
+          <img src="${data.url}" />
+        </details>
+      `,
+      'hosted:video': (data) => `
+        <details>
+          <summary>
+            <a href="${data.url}">${data.title}</a>
+            (<a href="https://old.reddit.com${data.permalink}">Permalink</a>)
+          </summary>
+          <video controls muted="false">
+            <source src="${data.secure_media.reddit_video.fallback_url}" type="video/mp4">
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+        </details>
+      `,
+      'default': (data) => `
+        <a href="${data.url}">${data.title}</a>
+        (<a href="https://old.reddit.com${data.permalink}">Permalink</a>)
+      `
+    }
+
+    return (renderers[data.post_hint] || renderers['default'])(data)
+  }
+
+  css(`
+    & {
+      border: 1px solid black;
+      border-radius: 2px;
+      display: block;
+      padding: 1rem;
+    }
+
+    & .loading {
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    & h2 {
+      margin: 0 0 1rem;
+    }
+
+    & ol {
+      max-height: 320px;
+      overflow-y: auto;
+      margin-left: -1rem;
+      margin-right: -1rem;
+    }
+
+    & li {
+      margin-bottom: 1rem;
+    }
+
+    & img,
+    & video {
+      max-width: 100%;
+    }
+  `)
+
+  function query(target) {
+    const state = redditById(target.id)
+
+    const r = target.getAttribute('r') || 'all'
+    const sort = target.getAttribute('sort') || ''
+    const { paginate } = state
+
+    const query = { r, sort, paginate }
+
+    request(target, query)
+
+    return state
+  }
+
+  async function request(target, query) {
+    const lookup = JSON.stringify(query)
+
+    const { dataset } = target
+
+    if(lookup !== dataset.lookup) {
+      target.dataset.lookup = lookup
+
+      const { r, sort = '', paginate = '' } = query
+      const url = `https://www.reddit.com/r/${r}/${sort}/.json?count=25${paginate}`
+
+      await fetch(url)
+        .then(res => res.json())
+        .then(json => json.data)
+        .then(response => set({
+          ...response,
+          loading: false
+        }, merge(target.id)))
+    }
+  }
+
+  function paginate(key) {
+    return ({ target }) => {
+      const { id } = target.dataset
+      const state = redditById(id)
+      const query = key !== 'reset'
+        ? `&${key}=${state[key]}`
+        : ''
+
+      set({ paginate: query, loading: true }, merge(id))
+      document.getElementById(id)
+        .querySelector('ol').scrollTop = '0'
+    }
+  }
+
+  function merge(id) {
+    return function middleware(state, payload) {
+      return {
+        ...state,
+        [id]: {
+          ...state[id],
+          ...payload
+        }
+      }
+    }
+  }
+</script>
