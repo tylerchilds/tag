@@ -1,4 +1,5 @@
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet" />
   <style>
     * {
@@ -188,6 +189,8 @@
 
     & button {
       display: block;
+      min-height: 3rem;
+      margin: 1rem 0;
       width: 100%;
     }
 
@@ -275,6 +278,10 @@
       grid-template-rows: repeat(auto-fill, 4rem);
       padding: 1rem;
       width: 100%;
+    }
+
+    & .icons button {
+      margin: 0;
     }
 
     & .mode-${modes.home} transition {
