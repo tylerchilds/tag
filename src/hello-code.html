@@ -1,0 +1,61 @@
+<!-- hello-editor.html -->
+<head>
+  <!-- inject quilljs -->
+  <link href="https://unpkg.com/codemirror@5.60.0/lib/codemirror.css" rel="stylesheet">
+  <script src="https://unpkg.com/codemirror@5.60.0/lib/codemirror.js"></script>
+</head>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px">
+  <hello-code data-key="demo" data-mode="edit"></hello-code>
+  <hello-code data-key="demo" data-mode="view"></hello-code>
+</div>
+
+<script type="module">
+  import tag from './tag.js'
+
+  const emptyEditor = {
+    delta: {},
+    rawHTML: ""
+  }
+
+  const { html, get, set } = tag('hello-code')
+
+  html(target => {
+    const { key, mode } = target.dataset
+    const { contents } = editorByKey(key)
+
+    if(mode === 'view') {
+      return rawHTML
+    }
+
+    editor(target, contents)
+  })
+
+  function editor(target, contents) {
+    if(! target.editor) {
+      const container = document.createElement('div')
+      target.appendChild(container)
+
+      target.editor = CodeMirror(container, {
+        value: contents
+      })
+    }
+  }
+
+  function update(target) {
+    const { key } = target.dataset
+
+    return function updateEditor() {
+      const delta = target.editor.getContents()
+      const rawHTML = target.editor.root.innerHTML
+
+      set({
+        [key]: { delta, rawHTML }
+      })
+    }
+  }
+
+  export function editorByKey(key) {
+    return get()[key] || emptyEditor
+  }
+</script>
