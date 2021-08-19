@@ -37,10 +37,12 @@ function on(slug, eventName, selector, callback) {
 }
 
 function restore(slug, initialState) {
-  ion.restore(slug).then(state => {
+  const promise = ion.restore(slug)
+  promise.then(state => {
     set(slug, { ...initialState, ...state, loaded: true })
   })
   set(slug, initialState)
+  return promise
 }
 
 export default function tag(slug, initialState = {}) {
@@ -51,6 +53,8 @@ export default function tag(slug, initialState = {}) {
     get: get.bind(null, slug),
     on: on.bind(null, slug),
     html: html.bind(null, slug),
-    set: set.bind(null, slug)
+    restore: restore.bind(null, slug),
+    set: set.bind(null, slug),
+    slug
   }
 }
