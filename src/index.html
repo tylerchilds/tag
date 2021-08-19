@@ -7,8 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style type="text/css">
+      @font-face {
+        font-family: 'Fira Code';
+        src: url('FiraCode-VF.ttf') format("truetype-variations");
+        font-weight: 1 999;
+      }
+
+      @font-face {
+        font-family: 'STIXTwoText';
+        src: url('STIXTwoText[wght].ttf') format("truetype-variations");
+        font-weight: 400 700;
+      }
+
+      @font-face {
+        font-family: 'STIXTwoText';
+        src: url('STIXTwoText-Italic[wght].ttf') format("truetype-variations");
+        font-style: italic;
+      }
+
       html {
         background: oldlace;
+        font-size: 1.1em;
+        font-family: 'STIXTwoText';
       }
       body {
         line-height: 1.5;
@@ -49,7 +69,12 @@
       code {
         background: papayawhip;
         border: 1px dashed orange;
-        font-size: 1.5em;
+        font-family: 'Fira Code';
+        font-size: 1.1em;
+      }
+
+      xmp {
+        font-family: 'Fira Code';
       }
 
       pre {
@@ -95,6 +120,7 @@
 					0 8px 8px rgba(0, 0, 0, .05);
 
 				border-radius: 2px;
+				color: white;
 				display: inline-block;
 				font-weight: bold;
 				padding: 1rem;
@@ -147,16 +173,17 @@
     </center>
 
     <p style="font-size: 1.5em">
-      <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">JavaScript</a>
-			for building robust web applications with other
-			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
-			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">techonolgies</a>.
-			In all, <strong>Tag provides a unified approach for</strong>
+			<strong>Tag provides a unified approach for</strong>
 			<grafitti color="orange">rendering</grafitti>,
 			<grafitti color="rebeccapurple">scoped styles</grafitti>,
 			<grafitti color="lime">event delegation</grafitti>,
 			<grafitti color="dodgerblue">state management</grafitti>,
 			and <strong>only those four things</strong>.
+      Plainly, Tag is <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">JavaScript</a>
+      with other
+			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
+			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">techonolgies</a>
+      embedded within.
     </p>
 
     <hr />
@@ -185,7 +212,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
       </p>
     </p>
     <details>
-      <summary>
+      <summary class="rainbow-button">
         Toggle Visibility of returned object properties.
       </summary>
       <br/>
@@ -331,12 +358,13 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 		</p>
 
 		<p>
-			Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>. Previously, he built <a href="https://cutestrap.com">Cutestrap</a>.
+			Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>.
 		</p>
 
 		<p>
 			You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
 		</p>
+    <p><strong>Fun fact!</strong> <a href="https://thelanding.page/tag">Tag</a> is the final part in a now-complete solo trilogy. <a href="https://www.tylerchilds.com/projects/vanilla-html/">Vanilla HTML</a> was released in 2013 and <a href="https://www.cutestrap.com/">Cutestrap</a> was a cult-hit in 2016!
 		<h2>Source Code</h2>
     <p>
       Available on
@@ -392,10 +420,10 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 						background: ${color};
 						border-radius: ${n(4, 0, 100, 'px')};
 						content: '';
-						inset: -.5rem;
+						inset: ${n(1, -.75, .1, 'rem')};
 						position: absolute;		
 						opacity: ${n(1, .2, .35)};
-						transform: rotate(${n(1, -7, 7, 'deg')});
+            transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
 					}
 
 					& span {
