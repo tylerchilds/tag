@@ -38,11 +38,11 @@
         overflow-x: hidden;
       }
 
-			*:focus {
-				border-radius: none;
-				outline: 2px dashed orange;
-				outline-offset: .5rem;
-			}
+      *:focus {
+        border-radius: none;
+        outline: 2px dashed orange;
+        outline-offset: .5rem;
+      }
 
       h2 {
         margin-top: 5rem;
@@ -97,61 +97,62 @@
         margin-bottom: 2rem;
       }
 
-			@keyframes rainbow-background {
-				0% {
-						background: orange;
-				}
-				33% {
-						background: rebeccapurple;
-				}
-				66% {
-						background: lime;
-				}
-				100% {
-						background: dodgerblue;
-				}
-			}
+      @keyframes rainbow-background {
+        0% {
+          background: orange;
+        }
+        33% {
+          background: rebeccapurple;
+        }
+        66% {
+          background: lime;
+        }
+        100% {
+          background: dodgerblue;
+        }
+      }
 
-			.rainbow-button {
-				animation: rainbow-background
-					10000ms linear infinite alternate-reverse;
-				box-shadow:
-					0 2px 2px rgba(0, 0, 0, .25),
-					0 4px 4px rgba(0, 0, 0, .15),
-					0 8px 8px rgba(0, 0, 0, .05);
+      .rainbow-button {
+        animation: rainbow-background
+          10000ms linear infinite alternate-reverse;
+        box-shadow:
+          0 2px 2px rgba(0, 0, 0, .25),
+        0 4px 4px rgba(0, 0, 0, .15),
+        0 8px 8px rgba(0, 0, 0, .05);
 
-				border-radius: 2px;
-				color: white;
-				display: inline-block;
-				font-weight: bold;
-				padding: 1rem;
-				text-shadow:
-					0 1px rgba(0, 0, 0, .85),
-					0 1px 2px rgba(0, 0, 0, .65);
-				text-decoration: none;
-				transition: all 100ms ease-in-out;
-			}
+        border-radius: 2px;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+        padding: 1rem;
+        text-shadow:
+          0 1px rgba(0, 0, 0, .85),
+          0 1px 2px rgba(0, 0, 0, .65);
+        text-decoration: none;
+        transition: all 100ms ease-in-out;
+      }
 
-			.rainbow-button:link,
-			.rainbow-button:visited {
-				color: white;
-			}
+      .rainbow-button:link,
+      .rainbow-button:visited {
+        color: white;
+      }
 
-			.rainbow-button:hover,
-			.rainbow-button:focus {
-				box-shadow:
-					0 4px 4px rgba(0, 0, 0, .15),
-					0 8px 8px rgba(0, 0, 0, .10),
-					0 16px 16px rgba(0, 0, 0, .05);
-				transform: scale(1.05)
-			}
+      .rainbow-button:hover,
+      .rainbow-button:focus {
+        box-shadow:
+          0 4px 4px rgba(0, 0, 0, .15),
+          0 8px 8px rgba(0, 0, 0, .10),
+          0 16px 16px rgba(0, 0, 0, .05);
+        transform: scale(1.05)
+      }
 
-			.rainbow-button:active {
-				box-shadow:
-					0 1px 1px rgba(0, 0, 0, .4),
-					0 2px 2px rgba(0, 0, 0, .2);
-				transform: scale(.99)
-			}
+      .rainbow-button:active {
+        box-shadow:
+          0 1px 1px rgba(0, 0, 0, .4),
+          0 2px 2px rgba(0, 0, 0, .2);
+        transform: scale(.99)
+      }
     </style>
   </head>
 
@@ -159,7 +160,7 @@
     <center>
       <h1><code>&lt;tag&gt;</code></h1>
       <p>
-        The portable port-able part of the web for the whole wide world
+      The portable port-able part of the web for the whole wide world
       </p>
 
       <a href="./tag.zip" class="rainbow-button">
@@ -174,17 +175,16 @@
     </center>
 
     <p style="font-size: 1.5em">
-			<strong>Tag provides a unified approach for</strong>
-			<grafitti color="orange">rendering</grafitti>,
-			<grafitti color="rebeccapurple">scoped styles</grafitti>,
-			<grafitti color="lime">event delegation</grafitti>,
-			<grafitti color="dodgerblue">state management</grafitti>,
-			and <strong>only those four things</strong>.
-      Plainly, Tag is <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">JavaScript</a>
-      with other
-			<a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
-			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS">techonolgies</a>
-      embedded within.
+    <strong>Tag provides a unified approach for</strong>
+    <grafitti color="orange">rendering</grafitti>,
+    <grafitti color="rebeccapurple">scoped styles</grafitti>,
+    <grafitti color="lime">event delegation</grafitti>,
+    <grafitti color="dodgerblue">state management</grafitti>,
+    and <strong>only those four things</strong>.
+    Plainly, Tag is a <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">trifecta</a> of 
+    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">techonolgies</a>
+    designed to build expressive web applications.
     </p>
 
     <hr />
@@ -196,21 +196,21 @@
     <pre><xmp>import tag from 'https://thelanding.page/tag/tag.js'
 tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
-		<p><em>
-			Tip: View the source of the example page to see &lt;hello-world&gt; in action!	
-		</em></p>
+    <p><em>
+      <strong>Tip!</strong> View the source of the example page to see &lt;hello-world&gt; in action!
+    </em></p>
     <a name="documentation"></a>
     <h2>Documentation</h2>
     <p>
-      <code>
-        <strong>tag(slug: string [, state: object]) : object</strong>
-      </code>
-      <p>
-        Creates an custom, scoped HTML tag. Requires a slug, which is a CSS selector as a string. An optional second argument may be passed for seeding the initial state.
-      </p>
-      <p>
-       It will return an object with the slug as an attribute and the following namespaced functions.
-      </p>
+    <code>
+      <strong>tag(slug: string [, state: object]) : object</strong>
+    </code>
+    <p>
+    Creates an custom, scoped HTML tag. Requires a slug, which is a CSS selector as a string. An optional second argument may be passed for seeding the initial state.
+    </p>
+    <p>
+    It will return an object with the slug as an attribute and the following namespaced functions.
+    </p>
     </p>
     <details>
       <summary class="rainbow-button">
@@ -240,7 +240,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
         </dd>
         <dt><code>restore() : promise(state)</code></dt>
         <dd>
-          Recovers the previous state allowing for persisting data across page refreshes. Called automatically when a new tag is initialized. Returns a promise with the tag's state.
+        Recovers the previous state allowing for persisting data across page refreshes. Called automatically when a new tag is initialized. Returns a promise with the tag's state.
         </dd>
       </dl>
     </details>
@@ -261,7 +261,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
     The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
     </p>
 
-<pre><xmp><!-- hello-name.html -->
+    <pre><xmp><!-- hello-name.html -->
 <hello-name></hello-name>
 
 <script type="module">
@@ -300,77 +300,77 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
       <!-- hello-editor -->
       <dt><code>&lt;hello-editor&gt;</code> <a href="./hello-editor.html">View Example</a></dt>
       <dd>
-        What-You-See-Is-What-You-Get style content editing with <a href="https://quilljs.com/">QuillJS</a>.
+      What-You-See-Is-What-You-Get style content editing with <a href="https://quilljs.com/">QuillJS</a>.
       </dd>
 
       <!-- hello-map -->
       <dt><code>&lt;hello-map&gt;</code> <a href="./hello-map.html">View Example</a></dt>
       <dd>
-        A <a href="https://maplibre.org">maplibre.org</a> integration that incorporates live realtime data. A direct port of <a href="https://maplibre.org/maplibre-gl-js-docs/example/live-geojson/">this example from their official docs</a>.
+      A <a href="https://maplibre.org">maplibre.org</a> integration that incorporates live realtime data. A direct port of <a href="https://maplibre.org/maplibre-gl-js-docs/example/live-geojson/">this example from their official docs</a>.
       </dd>
 
       <!-- hello-reddit -->
       <dt><code>&lt;hello-reddit&gt;</code> <a href="./hello-reddit.html">View Example</a></dt>
       <dd>
-        A <a href="https://old.reddit.com">reddit</a> integration that exposes their API over HTML. Control which subreddits are queried and how they are sorted with attributes.
+      A <a href="https://old.reddit.com">reddit</a> integration that exposes their API over HTML. Control which subreddits are queried and how they are sorted with attributes.
       </dd>
 
       <!-- hello-launcher -->
       <dt><code>&lt;hello-launcher&gt;</code> <a href="./hello-launcher.html">View Example</a></dt>
       <dd>
-        An application that opens and manages other applications. Inspired by and a prototype for <a href="https://forum.solidproject.org/t/idea-launcher-app/3468">this forum post</a>.
+      An application that opens and manages other applications. Inspired by and a prototype for <a href="https://forum.solidproject.org/t/idea-launcher-app/3468">this forum post</a>.
       </dd>
     </dl>
 
     <hr />
 
     <a name="author"></a>
-		<div style="float: right; max-width: 240px; border: 2px orange dashed; padding: 1rem; margin: 4rem -2rem 1rem 1rem;">
-			<h3 style="margin-top: 0;">Inspirations</h3>
-			<p>
-				Inspiring people building interesting projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
-			</p>
-			<ul>
-				<li>
-					<a href="https://small-tech.org">Small Technology Foundation</a>
-				</li>
-				<li>
-					<a href="https://solidproject.org/">Solid Project</a>
-				</li>
-				<li>
-					<a href="https://spritelyproject.org/">Spritely Project</a>
-				</li>
-				<li>
-					<a href="https://100r.co">Hundredrabbits</a>
-				</li>
-				<li>
-					<a href="https://safenetwork.tech/">Safe Network</a>
-				</li>
-				<li>
-					<a href="https://owncast.online/">Owncast</a>
-				</li>
-			</ul>
-		</div>
+    <div style="float: right; max-width: 240px; border: 2px orange dashed; padding: 1rem; margin: 4rem -2rem 1rem 1rem;">
+      <h3 style="margin-top: 0;">Inspirations</h3>
+      <p>
+      Inspiring people building interesting projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
+      </p>
+      <ul>
+        <li>
+          <a href="https://small-tech.org">Small Technology Foundation</a>
+        </li>
+        <li>
+          <a href="https://solidproject.org/">Solid Project</a>
+        </li>
+        <li>
+          <a href="https://spritelyproject.org/">Spritely Project</a>
+        </li>
+        <li>
+          <a href="https://100r.co">Hundredrabbits</a>
+        </li>
+        <li>
+          <a href="https://safenetwork.tech/">Safe Network</a>
+        </li>
+        <li>
+          <a href="https://owncast.online/">Owncast</a>
+        </li>
+      </ul>
+    </div>
 
 
-		<h2>About the Author</h2>
-		<p>
-			<a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
-		</p>
-
-		<p>
-			Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>.
-		</p>
-
-		<p>
-			You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
-		</p>
-    <p><strong>Fun fact!</strong> <a href="https://thelanding.page/tag">Tag</a> is the final part in a now-complete solo trilogy. <a href="https://www.tylerchilds.com/projects/vanilla-html/">Vanilla HTML</a> was released in 2013 and <a href="https://www.cutestrap.com/">Cutestrap</a> was a cult-hit in 2016!
-		<h2>Source Code</h2>
+    <h2>About the Author</h2>
     <p>
-      Available on
-      <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
-      under the MIT license.
+    <a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
+    </p>
+
+    <p>
+    Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>.
+    </p>
+
+    <p>
+    You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
+    </p>
+    <p><strong>Fun fact!</strong> <a href="https://thelanding.page/tag">Tag</a> is the final part in a now-complete solo trilogy. <a href="https://www.tylerchilds.com/projects/vanilla-html/">Vanilla HTML</a> was a flop in 2013 and <a href="https://www.cutestrap.com/">Cutestrap</a> was a cult-hit in 2016!
+    <h2>Source Code</h2>
+    <p>
+    Available on
+    <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
+    under the MIT license.
     </p>
 
     <footer>
@@ -379,72 +379,72 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
       </center>
     </footer>
 
-  <script type="module">
-    import tag from './tag.js'
+    <script type="module">
+      import tag from './tag.js'
 
-    tag('#details-link').on('click', '', openAccordion)
+        tag('#details-link').on('click', '', openAccordion)
 
-    const accordion = tag('details')
+        const accordion = tag('details')
 
-    accordion.on('click', 'summary', function toggle() {
-      const { open } = accordion.get()
-      accordion.set({ open: ! open })
-    })
+        accordion.on('click', 'summary', function toggle() {
+          const { open } = accordion.get()
+          accordion.set({ open: ! open })
+        })
 
-    function openAccordion () {
-      accordion.set({ open: true })
-      document.querySelector(accordion.slug)
-        .setAttribute('open', 'true')
-    }
+        function openAccordion () {
+          accordion.set({ open: true })
+          document.querySelector(accordion.slug)
+            .setAttribute('open', 'true')
+        }
 
-    accordion.restore().then(() => {
-      const { open } = accordion.get()
+        accordion.restore().then(() => {
+          const { open } = accordion.get()
 
-      if(open) openAccordion()
-    })
+          if(open) openAccordion()
+        })
 
-		const grafitti = tag('grafitti')
+        const grafitti = tag('grafitti')
 
-		grafitti.html((target) => {
-			const color = target.getAttribute('color')
+        grafitti.html((target) => {
+          const color = target.getAttribute('color')
 
-			if(!target.css) {
-				target.css = `
-					& {
-						display: inline-block;
-						position: relative;
-						z-index: 1;
-						white-space: nowrap;
-					}
+          if(!target.css) {
+            target.css = `
+              & {
+                display: inline-block;
+                position: relative;
+                z-index: 1;
+                white-space: nowrap;
+              }
 
-					&[color="${color}"]::before {
-						background: ${color};
-						border-radius: ${n(4, 0, 100, 'px')};
-						content: '';
-						inset: ${n(1, -.75, .1, 'rem')};
-						position: absolute;		
-						opacity: ${n(1, .2, .35)};
-            transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
-					}
+              &[color="${color}"]::before {
+                background: ${color};
+                border-radius: ${n(4, 0, 100, 'px')};
+                content: '';
+                inset: ${n(1, -.75, .1, 'rem')};
+                position: absolute;
+                opacity: ${n(1, .2, .35)};
+                transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
+              }
 
-					& span {
-						position: relative;
-						z-index: 1;
-					}
-				`
-				grafitti.css(target.css)
-				target.html = `<span>${target.innerHTML}</span>`	
-			}
+              & span {
+                position: relative;
+                z-index: 1;
+              }
+            `
+            grafitti.css(target.css)
+            target.html = `<span>${target.innerHTML}</span>`
+          }
 
-			return target.html
-		})
+          return target.html
+        })
 
-		function n(times = 1, min = 0, max = 1, suffix = '') {
-			return [...new Array(times)]
-				.map(() => Math.random() * (max - min) + min)
-				.map(x => `${x}${suffix}`)
-				.join(' ')
-		}
-  </script>
+        function n(times = 1, min = 0, max = 1, suffix = '') {
+          return [...new Array(times)]
+            .map(() => Math.random() * (max - min) + min)
+            .map(x => `${x}${suffix}`)
+            .join(' ')
+        }
+    </script>
   </body>
 </html>
