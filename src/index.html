@@ -176,10 +176,10 @@
 
     <p style="font-size: 1.5em">
     <strong>Tag provides a unified approach for</strong>
-    <grafitti color="orange">rendering</grafitti>,
-    <grafitti color="rebeccapurple">scoped styles</grafitti>,
-    <grafitti color="lime">event delegation</grafitti>,
-    <grafitti color="dodgerblue">state management</grafitti>,
+    <highlighter color="orange">rendering</highlighter>,
+    <highlighter color="rebeccapurple">scoped styles</highlighter>,
+    <highlighter color="lime">event delegation</highlighter>,
+    <highlighter color="dodgerblue">state management</highlighter>,
     and <strong>only those four things</strong>.
     Plainly, Tag is a <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">trifecta</a> of 
     <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
@@ -402,49 +402,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
           if(open) openAccordion()
         })
-
-        const grafitti = tag('grafitti')
-
-        grafitti.html((target) => {
-          const color = target.getAttribute('color')
-
-          if(!target.css) {
-            target.css = `
-              & {
-                display: inline-block;
-                position: relative;
-                z-index: 1;
-                white-space: nowrap;
-              }
-
-              &[color="${color}"]::before {
-                background: ${color};
-                border-radius: ${n(4, 0, 100, 'px')};
-                content: '';
-                inset: ${n(1, -.75, .1, 'rem')};
-                position: absolute;
-                opacity: ${n(1, .2, .35)};
-                transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
-              }
-
-              & span {
-                position: relative;
-                z-index: 1;
-              }
-            `
-            grafitti.css(target.css)
-            target.html = `<span>${target.innerHTML}</span>`
-          }
-
-          return target.html
-        })
-
-        function n(times = 1, min = 0, max = 1, suffix = '') {
-          return [...new Array(times)]
-            .map(() => Math.random() * (max - min) + min)
-            .map(x => `${x}${suffix}`)
-            .join(' ')
-        }
     </script>
+    <script src="./tags/highlighter.js" type="module"></script>
   </body>
 </html>
