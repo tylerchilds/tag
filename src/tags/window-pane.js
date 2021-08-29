@@ -1,6 +1,6 @@
 import tag from '../tag.js'
 
-const { html, get, on, set, css } = tag('window-pane')
+const { html, get, on, set, css } = tag('window-pane', { z: 1 })
 
 const paneByTarget = (target) => {
   const { id } = target.closest('window-pane')
@@ -11,7 +11,8 @@ const paneByTarget = (target) => {
     content: '',
     maximized: false,
     x: 0,
-    y: 0
+    y: 0,
+    z: 1
   }
 }
 
@@ -38,17 +39,18 @@ function update(target, payload) {
 })()
 
 html(target => {
-  const { title, content, grabbed, maximized, x, y } = paneByTarget(target)
+  const { title, content, grabbed, maximized, x, y, z } = paneByTarget(target)
 
   const maximizeOrRestore = maximized
     ? `<button aria-label="Restore"></button>`
     : `<button aria-label="Maximize"></button>`
 
-  // return ` // bypassing virtual dom for now to work around a bug
+  // bypassing virtual dom for now due to bug with max/restore
+  // return `
   target.innerHTML = `
     <div
       class="window ${maximized ? 'maximized' : ''}"
-      style="width: 250px; --x: ${x}px; --y: ${y}px"
+      style="width: 250px; --x: ${x}px; --y: ${y}px; --z: ${z};"
     >
       <div class="title-bar ${grabbed ? 'grabbing' : ''}">
         <div class="title-bar-text">${title}</div>
@@ -89,9 +91,14 @@ function close({ target }) {
 on('mousedown', '.title-bar', grab)
 on('mousemove', '.title-bar', drag)
 on('mouseup', '.title-bar', ungrab)
+on('mouseout', '.title-bar', ungrab)
 
 function grab({ target }) {
-  update(target, { grabbed: true })
+  const { z } = get()
+  const newZ = z + 1
+
+  update(target, { grabbed: true, z: newZ })
+  set({ z: newZ })
 }
 
 function drag(event) {
@@ -110,20 +117,23 @@ function ungrab({ target }) {
   update(target, { grabbed: false })
 }
 
-const windows7 = document.createElement('link');
-windows7.rel = 'stylesheet';
-windows7.href = 'https://unpkg.com/7.css';
-document.head.appendChild(windows7);
+const windows7 = document.createElement('link')
+windows7.rel = 'stylesheet'
+windows7.href = 'https://unpkg.com/7.css'
+document.head.appendChild(windows7)
 
 css(`
   & .window {
     transition: width 250ms ease-in-out;
     transform: translate(var(--x), var(--y));
+    z-index: var(--z);
   }
 
   & .maximized {
     animation: &-cooldown 100ms;
     transform: translate(0, 0) !important;
+    position: fixed;
+    inset: 0;
     width: 100% !important;
     height: 100%;
   }
