@@ -1,44 +1,56 @@
 import tag from '../tag.js'
 
+// initialize the 7.css stylesheet
+const windows7 = document.createElement('link')
+windows7.rel = 'stylesheet'
+windows7.href = 'https://unpkg.com/7.css'
+document.head.appendChild(windows7)
+
+// Locally Scoped Tag Commands
 const { html, get, on, set, css } = tag('window-pane', { z: 1 })
 
-const paneByTarget = (target) => {
-  const { id } = target.closest('window-pane')
+// Public Interface
+export default function createWindowPane(id, title, content) {
+  const pane = paneById(id)
+  setState(pane, { title, content })
 
+  return `
+    <window-pane title="${title}" id="${id}">
+      ${content}
+    </window-pane>
+  `
+}
+
+// Return a pane based on an id
+const paneById = (id) => {
   return get()[id] || {
     id,
-    grabbed: false,
     content: '',
+    grabbed: false,
     maximized: false,
+    title: 'Untitled',
     x: 0,
     y: 0,
     z: 1
   }
 }
 
-function update(target, payload) {
-  const pane = paneByTarget(target)
-
-  set(payload, function merge(state) {
-    return {
-      ...state,
-      [pane.id]: {
-        ...pane,
-        ...payload
-      }
-    }
-  })
+// Return a pane based on an HTMLElement, will traverse up the tree until found
+const paneByTarget = (target) => {
+  const { id } = target.closest('window-pane')
+  return paneById(id)
 }
 
-(function load() {
-  [...document.querySelectorAll('window-pane')]
-    .map(target => update(target, { 
-      content: target.innerHTML,
-      title: target.getAttribute('title')
-    }))
-})()
+// Surgically update state for a pane based on an HTMLElement
+const update = (target, payload) => {
+  const pane = paneByTarget(target)
+  setState(pane, payload)
+}
 
+// render html on state change
 html(target => {
+  if(!target.renderable) load(target)
+
   const { title, content, grabbed, maximized, x, y, z } = paneByTarget(target)
 
   const maximizeOrRestore = maximized
@@ -46,7 +58,9 @@ html(target => {
     : `<button aria-label="Maximize"></button>`
 
   // bypassing virtual dom for now due to bug with max/restore
+  // expected:
   // return `
+  // actual:
   target.innerHTML = `
     <div
       class="window ${maximized ? 'maximized' : ''}"
@@ -67,32 +81,39 @@ html(target => {
   `
 })
 
+// bind actions for title bar controls
 on('click', '[aria-label="Minimize"]', minimize)
 on('click', '[aria-label="Maximize"]', maximize)
 on('click', '[aria-label="Restore"]', restore)
 on('click', '[aria-label="Close"]', close)
 
+// minimize a pane
 function minimize({ target }) {
   alert('Minimized Window')
 }
 
+// maximize a pane
 function maximize({ target }) {
   update(target, { maximized: true })
 }
 
+// restore a pane
 function restore({ target }) {
   update(target, { maximized: false })
 }
 
+// close a pane
 function close({ target }) {
   alert('Closed Window')
 }
 
+// bind actions for title bar movement
 on('mousedown', '.title-bar', grab)
 on('mousemove', '.title-bar', drag)
 on('mouseup', '.title-bar', ungrab)
 on('mouseout', '.title-bar', ungrab)
 
+// grab a pane
 function grab({ target }) {
   const { z } = get()
   const newZ = z + 1
@@ -101,6 +122,7 @@ function grab({ target }) {
   set({ z: newZ })
 }
 
+// drag a pane
 function drag(event) {
   const { target, movementX, movementY } = event
   const { grabbed, x, y } = paneByTarget(target)
@@ -113,15 +135,12 @@ function drag(event) {
   }
 }
 
+// release a pane
 function ungrab({ target }) {
   update(target, { grabbed: false })
 }
 
-const windows7 = document.createElement('link')
-windows7.rel = 'stylesheet'
-windows7.href = 'https://unpkg.com/7.css'
-document.head.appendChild(windows7)
-
+// establish scoped css overrides
 css(`
   & .window {
     transition: width 250ms ease-in-out;
@@ -151,3 +170,30 @@ css(`
     cursor: grabbing;
   }
 `)
+
+// asyncronously load a pane on first render
+async function load(target) {
+  target.renderable = true
+
+  const config = await new Promise(resolve => {
+    resolve({
+      content: target.innerHTML,
+      title: target.getAttribute('title')
+    })
+  })
+
+  update(target, config)
+}
+
+// manage nested state merge for surgically updating a single pane
+function setState(pane, payload) {
+  set(payload, function merge(state) {
+    return {
+      ...state,
+      [pane.id]: {
+        ...pane,
+        ...payload
+      }
+    }
+  })
+}
