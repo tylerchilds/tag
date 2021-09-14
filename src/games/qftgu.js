@@ -20,9 +20,9 @@ function gameLoop() {
   const { tile, paused } = game.get()
 
   if(paused) return
-  requestAnimationFrame(gameLoop)
 
   TILES[tile] ? TILES[tile]() : error()
+  requestAnimationFrame(gameLoop)
 }
 
 function error() {
