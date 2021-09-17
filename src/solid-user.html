@@ -1,0 +1,67 @@
+<solid-user>
+  ;) Hey
+</solid-user>
+
+<script src="https://melvincarvalho.github.io/helloworld/scripts/solid-auth-client.bundle.js"></script>
+<script src="https://melvincarvalho.github.io/helloworld/scripts/rdflib.min.js"></script>
+
+<script type="module">
+  import tag from 'https://thelanding.page/tag/tag.js'
+
+  import handleKonami from './tags/konami-kid.js'
+  import createWindowPane from './tags/window-pane.js'
+
+  const popupUri = 'https://melvincarvalho.github.io/helloworld/popup.html'
+
+  const { html, get, on, set, css } = tag('solid-user', { session: {} })
+
+  const stranger = `<button id="in">De-Anonymize</button>`
+  on('click', '#in', () => solid.auth.popupLogin({ popupUri }))
+
+  const friend = `<button id="out">Anonymize</button>`
+  on('click', '#out', () => solid.auth.logout())
+
+  html(() => {
+    const { webId } = get().session
+
+    const name = webId ? ':) Friend' : ':/ Stranger'
+    const action = webId ? friend : stranger
+
+    return `
+      ${name}
+      ${action}
+    `
+  })
+
+  solid.auth.trackSession(session => {
+    if (session && session.webId) {
+      set({ session })
+    } else {
+      set({ session: {} })
+    }
+  })
+
+  css(`
+    & {
+      background: deepskyblue;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      padding: 8px;
+    }
+
+    & button {
+      margin-inline-start: 10px;
+    }
+  `)
+
+  handleKonami(() => {
+    const doors = createWindowPane('5071D-44xX04', 'Solid Developer Tools', `
+      <a href="https://forum.solidproject.org/" target="_blank">
+        Solid Project Forums
+      </a>
+    `)
+
+    document.body.insertAdjacentHTML("beforeend", doors)
+  })
+</script>

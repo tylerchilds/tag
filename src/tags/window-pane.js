@@ -104,7 +104,7 @@ function restore({ target }) {
 
 // close a pane
 function close({ target }) {
-  alert('Closed Window')
+  target.closest('window-pane').remove()
 }
 
 // bind actions for title bar movement

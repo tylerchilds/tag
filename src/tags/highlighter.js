@@ -1,8 +1,14 @@
 import tag from '../tag.js'
 const highlighter = tag('highlighter')
 
+const defaultColor = 'yellow'
+
+export default function highlight(string, color = defaultColor) {
+  return `<highlighter color="${color}">${string}</highlighter>`
+}
+
 highlighter.html((target) => {
-  const color = target.getAttribute('color')
+  const color = target.getAttribute('color') || defaultColor
 
   if(!target.css) {
     target.css = `
