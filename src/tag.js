@@ -1,4 +1,4 @@
-import { innerHTML } from 'https://diffhtml.org/es'
+import { innerHTML } from 'https://diffhtml.org/core'
 import ion from './vendor/ion/app.js'
 
 function html(slug, callback) {
