@@ -2,43 +2,56 @@
   ;) Hey
 </solid-user>
 
-<script src="https://melvincarvalho.github.io/helloworld/scripts/solid-auth-client.bundle.js"></script>
-<script src="https://melvincarvalho.github.io/helloworld/scripts/rdflib.min.js"></script>
-
 <script type="module">
   import tag from 'https://thelanding.page/tag/tag.js'
+  import solidClientAuthentication from './packages/solid-client-authn-browser.js'
 
   import handleKonami from './tags/konami-kid.js'
   import createWindowPane from './tags/window-pane.js'
 
-  const popupUri = 'https://melvincarvalho.github.io/helloworld/popup.html'
+  const { html, get, on, set, css } = tag('solid-user', { sessionInfo: {} })
 
-  const { html, get, on, set, css } = tag('solid-user', { session: {} })
+  const session = new solidClientAuthentication.Session()
+  session.handleIncomingRedirect(window.location.href)
+    .then(sessionInfo => set({ sessionInfo }))
 
-  const stranger = `<button id="in">De-Anonymize</button>`
-  on('click', '#in', () => solid.auth.popupLogin({ popupUri }))
+  export function getSessionInfo() {
+    return get().sessionInfo
+  }
 
-  const friend = `<button id="out">Anonymize</button>`
-  on('click', '#out', () => solid.auth.logout())
+  export function connect(event) {
+    event.preventDefault()
+    const { isLoggedIn } = get().sessionInfo
+
+    if(session.login && !isLoggedIn) {
+      session.login({
+        redirectUrl: window.location.href,
+        oidcIssuer: 'https://broker.pod.inrupt.com/',
+      });
+    }
+  }
+
+  export function disconnect() {
+    session.logout()
+    set({ sessionInfo: {} })
+  }
+
+  on('click', '#in', connect)
+  on('click', '#out', disconnect)
 
   html(() => {
-    const { webId } = get().session
+    const { webId, isLoggedIn } = getSessionInfo()
 
-    const name = webId ? ':) Friend' : ':/ Stranger'
-    const action = webId ? friend : stranger
+    const name = isLoggedIn ? ':) Friend' : ':/ Stranger'
+    const action = isLoggedIn
+      ? `<button id="out">Disconnect</button>`
+      : `<a id="in" href="https://broker.pod.inrupt.com/">Connect</a>`
 
     return `
       ${name}
+      ${webId ? webId : '' }
       ${action}
     `
-  })
-
-  solid.auth.trackSession(session => {
-    if (session && session.webId) {
-      set({ session })
-    } else {
-      set({ session: {} })
-    }
   })
 
   css(`
@@ -57,9 +70,18 @@
 
   handleKonami(() => {
     const doors = createWindowPane('5071D-44xX04', 'Solid Developer Tools', `
-      <a href="https://forum.solidproject.org/" target="_blank">
-        Solid Project Forums
-      </a>
+      <ul>
+        <li>
+          <a href="https://penny.vincenttunru.com/" target="_blank">
+            Penny
+          </a>
+        </li>
+        <li>
+          <a href="https://forum.solidproject.org/" target="_blank">
+            Solid Project Forums
+          </a>
+        </li>
+      </ul>
     `)
 
     document.body.insertAdjacentHTML("beforeend", doors)
