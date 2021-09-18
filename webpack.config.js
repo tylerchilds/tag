@@ -8,6 +8,7 @@ module.exports = {
     'solid-client': './src/packages/solid-client.js',
     'solid-client-authn-browser': './src/packages/solid-client-authn-browser.js',
     'vocab-common-rdf': './src/packages/vocab-common-rdf.js',
+    'focus-trap': './src/packages/focus-trap.js',
   },
   output: {
     library: {

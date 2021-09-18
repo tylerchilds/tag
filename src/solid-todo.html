@@ -1,0 +1,238 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<solid-todo></solid-todo>
+
+<script type="module">
+  import tag from 'https://thelanding.page/tag/tag.js'
+  import {
+    connect,
+    disconnect,
+    get as getSolidUser
+  } from './tags/solid-user.js'
+
+  const { html, css, get, on, set } = tag('solid-todo', {
+    filter: 'ALL',
+    items: [
+      {
+        id: 'dishes',
+        completed: false,
+        task: 'Dishes'
+      },
+      {
+        id: 'groceries',
+        completed: true,
+        task: 'Groceries'
+      },
+      {
+        id: 'bills',
+        completed: false,
+        task: 'Bills'
+      }
+    ]
+  })
+
+  function find(id) {
+    const { items } = get()
+    return items.find(x => x.id === id)
+  }
+
+  html(() => {
+    const { sessionInfo, name } = getSolidUser()
+    
+    if(sessionInfo.isLoggedIn) {
+
+    }
+
+    return `
+      <header>
+        <h1>${name} Tasks</h1>
+      </header>
+      <nav>
+        ${filter()}
+      </nav>
+      <main>
+        ${form()}
+        ${list()}
+      </main>
+    `
+  })
+
+  css(`
+    & {
+      font-family: Verdana, sans-serif;
+      display: grid;
+      gap: 2rem;
+      grid-template-areas: "header   nav"
+                          "main     main";
+      align-items: center;
+    }
+    & header {
+      grid-area: header;
+      text-align: right;
+    }
+    & h1 {
+      margin: 0;
+    }
+    & nav {
+      grid-area: nav;
+    }
+    & main {
+      grid-area: main;
+      display: grid;
+      place-content: center;
+    }
+    & form {
+      display: grid;
+      grid-template-columns: auto auto;
+    }
+    & button {
+      cursor: pointer;
+      padding: .6rem 1rem;
+      border: none;
+    }
+    & li {
+      margin-bottom: .5rem;
+    }
+    & [type="text"] {
+      font-size: 1.2rem;
+      padding: .25rem 1rem;
+    }
+    & .active {
+      background: black;
+      color: white;
+    }
+
+    & .done {
+      color: gray;
+      font-style: italic;
+      text-decoration: line-through;
+    }
+  `)
+
+  on('click', '[data-filter]', function chooseFilter({ target }) {
+    const { filter } = target.dataset
+    set({ filter })
+  })
+
+  function filter() {
+    const {
+      filter,
+      items
+    } = get()
+
+    return `
+      Filters:
+      <button
+        data-filter="ALL"
+        ${filter === 'ALL' ? 'class="active"' : ''}
+      >All</button>
+      <button
+        data-filter="TODO"
+        ${filter === 'TODO' ? 'class="active"' : ''}
+      >TODO</button>
+      <button
+        data-filter="DONE"
+        ${filter === 'DONE' ? 'class="active"' : ''}
+      >DONE</button>
+    `
+  }
+
+  on('submit', 'form', function submitForm(event) {
+    const { value } = event.target['task']
+    createItem(value);
+
+    event.preventDefault()
+  })
+
+  function form() {
+    return `
+      <form>
+        <input name="task" placeholder="Add a task..." type="text" />
+        <button type="submit">Add</button>
+      </form>
+    `
+  }
+
+  on('click', '[data-toggle]', function setFilter({ target }) {
+    const { id } = target.dataset;
+    const item = find(id)
+
+    updateItem({
+      ...item,
+      completed: !item.completed
+    })
+  })
+
+  function list() {
+    const {
+      filter,
+      items
+    } = get();
+
+    const filterItems = (i) => {
+      const lookup = {
+        'ALL': true,
+        'TODO': !i.completed,
+        'DONE': i.completed
+      }
+      return lookup[filter];
+    }
+
+    return items
+      .filter(filterItems)
+      .map(i => `
+        <li>
+          <button
+            ${i.completed ? 'class="done"' : ''}
+            data-toggle
+            data-id="${i.id}"
+          >${i.task}</button>
+        </li>
+      `)
+      .join('')
+  }
+
+  function createItem(task) {
+    const payload = {
+      task,
+      completed: false,
+      id: task.replace(/\s+/g, '')
+    }
+
+    const handler = (state, payload) => {
+      return {
+        ...state,
+        items: [
+          ...state.items,
+          payload
+        ]
+      }
+    }
+
+    set(payload, handler);
+  }
+
+  function updateItem(payload) {
+    const handler = (state, payload) => {
+      return {
+        ...state,
+        items: [...state.items
+          .map((item) => {
+            if(item.id !== payload.id) {
+              return item;
+            }
+
+            return {
+              ...item,
+              ...payload
+            }
+          })
+        ]
+      };
+    };
+
+    set(payload, handler);
+  }
+</script>
