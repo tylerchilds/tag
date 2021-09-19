@@ -1,11 +1,11 @@
 import tag from 'https://thelanding.page/tag/tag.js'
+import trap from 'https://thelanding.page/tag/packages/focus-trap.js'
 
 import solidClientAuthentication from 'https://thelanding.page/tag/packages/solid-client-authn-browser.js'
 import solidClient from 'https://thelanding.page/tag/packages/solid-client.js'
 import solidVocab from 'https://thelanding.page/tag/packages/vocab-common-rdf.js'
 
 import handleKonami from './konami-kid.js'
-import launcher from '../games/launcher.js'
 
 const session = solidClientAuthentication.getDefaultSession()
 
@@ -14,7 +14,14 @@ const initialState = {
   profile: {},
   myDataset: {},
   name: 'Anonymous',
-  href: 'https://thelanding.page'
+  href: 'https://thelanding.page',
+  discover: 'Find anything...',
+  linkFilter: '',
+  links: [
+    ['Media Kraken', 'https://noeldemartin.github.io/media-kraken/login'],
+    ['Penny', 'https://penny.vincenttunru.com/'],
+    ['Todo List (alpha)', 'https://localhost/src/solid-todo.html'],
+  ]
 }
 
 export const { html, get, on, set, css } = tag('solid-user', initialState)
@@ -69,8 +76,87 @@ html(() => {
 
 css(`
   & {
+    display: block;
   }
 `)
+
+on('click', 'foreground a', function superlink(event) {
+  const { href } = event.target
+  set({ href, sprung: false })
+  event.preventDefault()
+})
+
+on('keyup', '[name="link-filter"]', function filterLinks({ target }) {
+    const { value: linkFilter } = target
+    set({ linkFilter })
+})
+
+function foreground() {
+  const { sprung, links, linkFilter, discover } = get()
+  return `
+    <foreground class="${sprung ? 'sprung' : ''}">
+      <card-container>
+        <input name="link-filter" placeholder="${discover}" type="text" />
+        ${map(links, linkFilter)}
+      </card-container>
+    </foreground>
+  `
+}
+
+css(`
+  & foreground {
+    background: white;
+    overflow-y: auto;
+    inset: 0;
+    opacity: 0;
+    padding-bottom: 4rem;
+    position: fixed;
+    transition: opacity 200ms;
+    z-index: -1;
+  }
+
+  & card-container {
+    display: block;
+    margin: 1rem auto;
+    max-width: 32rem;
+  }
+
+  & foreground.sprung {
+    display: block;
+    opacity: 1;
+    z-index: 1;
+  }
+
+  & foreground input {
+    box-sizing: border-box;
+    display: block;
+    font-size: 1rem;
+    padding: 1rem;
+    position: sticky;
+    top: 1rem;
+    width: 100%;
+  }
+
+  & foreground a {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin: 1rem;
+  }
+`)
+
+function map(links, filter) {
+  return links
+    .filter(algorithm(filter))
+    .map(([label, href]) => `<div>
+      <a href="${href}">${label}</a>
+    </div>`).join('')
+}
+
+function algorithm(filter) {
+  return ([label, href]) => {
+    return label.indexOf(filter) > -1 || href.indexOf(filter) > -1
+  }
+}
 
 function background() {
   const { href } = get()
@@ -81,46 +167,9 @@ function background() {
   `
 }
 
-on('click', 'foreground a', function superlink(event) {
-  const { href } = event.target
-  set({ href, sprung: false })
-  event.preventDefault()
-})
-
-function foreground() {
-  const { sprung } = get()
-  return `
-    <foreground class="${sprung ? 'sprung' : ''}">
-      <input input="text" />
-      <a href="https://localhost/src/solid-todo.html">
-        Todo App
-      </a>
-      <a href="https://noeldemartin.github.io/media-kraken/login">
-        Media Kraken
-      </a>
-      <a href="https://penny.vincenttunru.com/">
-        Penny
-      </a>
-    </foreground>
-  `
-}
-
-css(`
-  & foreground {
-    background: white;
-    inset: 0;
-    opacity: 0;
-    position: fixed;
-    transition: opacity 200ms;
-    z-index: -1;
-  }
-
-  & foreground.sprung {
-    display: block;
-    opacity: 1;
-    z-index: 1;
-  }
-`)
+on('click', '#solid-connect', (e) => { connect(e); springbox() })
+on('click', '#solid-disconnect', (e) => { disconnect(e); springbox() })
+on('click', '#profile-button', springbox)
 
 function profile() {
   const { name, sprung } = get()
@@ -142,15 +191,6 @@ function profile() {
       </profile-account>
     </profile>
   `
-}
-
-on('click', '#solid-connect', (e) => { connect(e); springbox() })
-on('click', '#solid-disconnect', (e) => { disconnect(e); springbox() })
-on('click', '#profile-button', springbox)
-
-function springbox() {
-  const { sprung } = get()
-  set({ sprung: !sprung })
 }
 
 css(`
@@ -198,6 +238,11 @@ css(`
     transform: translateY(-100%)
   }
 `)
+
+function springbox() {
+  const { sprung } = get()
+  set({ sprung: !sprung })
+}
 
 handleKonami(() => {
   const tools = `

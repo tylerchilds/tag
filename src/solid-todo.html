@@ -50,7 +50,7 @@
         <h1>${name} Tasks</h1>
       </header>
       <nav>
-        ${filter()}
+        ${filters()}
       </nav>
       <main>
         ${form()}
@@ -116,7 +116,11 @@
     set({ filter })
   })
 
-  function filter() {
+  on('click', '#clear', function clearAll() {
+    set({ items: [] })
+  })
+
+  function filters() {
     const {
       filter,
       items
@@ -136,13 +140,15 @@
         data-filter="DONE"
         ${filter === 'DONE' ? 'class="active"' : ''}
       >DONE</button>
+      (<a href="javaascript:;" id="clear">clear</a>)
     `
   }
 
   on('submit', 'form', function submitForm(event) {
-    const { value } = event.target['task']
-    createItem(value);
+    const input = event.target['task']
+    createItem(input.value);
 
+    input.value = ''
     event.preventDefault()
   })
 
@@ -163,6 +169,12 @@
       ...item,
       completed: !item.completed
     })
+  })
+
+  on('click', '[data-delete]', function setFilter({ target }) {
+    const { id } = target.dataset;
+    const item = find(id)
+    deleteItem(item)
   })
 
   function list() {
@@ -189,6 +201,11 @@
             data-toggle
             data-id="${i.id}"
           >${i.task}</button>
+          <button
+            data-delete
+            data-id="${i.id}">
+            X
+          </button>
         </li>
       `)
       .join('')
@@ -218,8 +235,8 @@
     const handler = (state, payload) => {
       return {
         ...state,
-        items: [...state.items
-          .map((item) => {
+        items: [
+          ...state.items.map((item) => {
             if(item.id !== payload.id) {
               return item;
             }
@@ -227,6 +244,23 @@
             return {
               ...item,
               ...payload
+            }
+          })
+        ]
+      };
+    };
+
+    set(payload, handler);
+  }
+
+  function deleteItem(payload) {
+    const handler = (state, payload) => {
+      return {
+        ...state,
+        items: [
+          ...state.items.filter((item) => {
+            if(item.id !== payload.id) {
+              return item;
             }
           })
         ]
