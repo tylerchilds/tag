@@ -244,32 +244,7 @@ function springbox() {
   set({ sprung: !sprung })
 }
 
-handleKonami(() => {
-  const tools = `
-    <developer-tools>
-      <ul>
-        <li>
-          <a href="https://penny.vincenttunru.com/" target="_blank">
-            Penny
-          </a>
-        </li>
-        <li>
-          <a href="https://forum.solidproject.org/" target="_blank">
-            Solid Project Forums
-          </a>
-        </li>
-      </ul>
-    </developer-tools>
-  `
-
-  css(`
-    developer-tools {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      right: 0;
-    }
-  `)
-
-  document.body.insertAdjacentHTML("beforeend", tools)
+handleKonami(async () => {
+  await import('./developer-tools.js')
+  document.body.insertAdjacentHTML("beforeend", "<developer-tools></developer-tools>")
 })
