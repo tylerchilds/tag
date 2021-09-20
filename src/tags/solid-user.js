@@ -5,6 +5,7 @@ import solidClientAuthentication from 'https://thelanding.page/tag/packages/soli
 import solidClient from 'https://thelanding.page/tag/packages/solid-client.js'
 import solidVocab from 'https://thelanding.page/tag/packages/vocab-common-rdf.js'
 
+import './rainbow-button.js'
 import handleKonami from './konami-kid.js'
 
 const session = solidClientAuthentication.getDefaultSession()
@@ -19,12 +20,16 @@ const initialState = {
   linkFilter: '',
   links: [
     ['Media Kraken', 'https://noeldemartin.github.io/media-kraken/login'],
-    ['Penny', 'https://penny.vincenttunru.com/'],
-    ['Todo List (alpha)', 'https://localhost/src/solid-todo.html'],
+    ['Write.as', 'https://write.as'],
+    ['Owncast', 'https://owncast.online/'],
+    ['Todo List (alpha)', 'https://thelanding.page/tag/solid-todo.html'],
+    ['Hello Universe', 'https://thelanding.page/tag/hello-universe.html'],
+    ['Penny (developers)', 'https://penny.vincenttunru.com/'],
+    ['Tag (developers)', 'https://thelanding.page/tag/'],
   ]
 }
 
-export const { html, get, on, set, css } = tag('solid-user', initialState)
+export const { html, get, on, set, css, restore } = tag('solid-user', initialState)
 
 export function connect(event) {
   event.preventDefault()
@@ -134,13 +139,16 @@ css(`
     padding: 1rem;
     position: sticky;
     top: 1rem;
-    width: 100%;
+    left: 1rem;
+    right: 1rem;
+    width: calc(100% - 2rem);
   }
 
   & foreground a {
     display: inline-block;
     font-size: 1.5rem;
     margin: 1rem;
+    padding: 0 1rem;
   }
 `)
 
@@ -185,9 +193,11 @@ function profile() {
         ${action}
       </profile-actions>
       <profile-account>
-        <button id="profile-button">
-          ${name}
-        </button>
+        <rainbow-button>
+          <a href="#" id="profile-button">
+            ${name}
+          </a>
+        </rainbow-button>
       </profile-account>
     </profile>
   `
@@ -206,6 +216,15 @@ css(`
     z-index: 2;
   }
 
+  & rainbow-button {
+    display: block;
+    width: 100%;
+  }
+
+  & rainbow-button > *{
+    width: 100%;
+  }
+
   & profile-account {
     display: block;
     grid-area: profile;
@@ -214,14 +233,6 @@ css(`
     transform: scale(1)
     transform-origin: center bottom;
     z-index: 1
-  }
-
-  & #profile-button {
-    background: deepskyblue;
-    border-radius: 4px;
-    display: block;
-    padding: 8px;
-    width: 100%;
   }
 
   & profile-actions {
@@ -246,5 +257,6 @@ function springbox() {
 
 handleKonami(async () => {
   await import('./developer-tools.js')
-  document.body.insertAdjacentHTML("beforeend", "<developer-tools></developer-tools>")
+  document.body.insertAdjacentHTML("beforeend", "<developer-tools><solid-user></solid-user></developer-tools>")
 })
+
