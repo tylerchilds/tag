@@ -1,15 +1,27 @@
-import { innerHTML } from 'https://diffhtml.org/core'
 import ion from './vendor/ion/app.js'
 
-function html(slug, callback) {
+let virtualDOM
+
+const render = (target, html) => {
+  if(virtualDOM) {
+    virtualDOM(target, html)
+  } else {
+    target.innerHTML = html
+  }
+}
+
+async function html(slug, callback) {
   ion.on('render', slug, (event) => {
     const { loaded } = get(slug)
 
     if(!loaded) return;
 
     const html = callback(event.target)
-    if(html) innerHTML(event.target, html)
+    if(html) render(event.target, html)
   })
+
+  const { innerHTML } = await import('https://esm.sh/diffhtml')
+  virtualDOM = innerHTML
 }
 
 function css(slug, stylesheet) {

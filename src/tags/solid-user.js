@@ -1,9 +1,9 @@
 import tag from 'https://thelanding.page/tag/tag.js'
-import trap from 'https://thelanding.page/tag/packages/focus-trap.js'
+import trap from 'https://esm.sh/focus-trap'
 
-import solidClientAuthentication from 'https://thelanding.page/tag/packages/solid-client-authn-browser.js'
-import solidClient from 'https://thelanding.page/tag/packages/solid-client.js'
-import solidVocab from 'https://thelanding.page/tag/packages/vocab-common-rdf.js'
+import solidClientAuthentication from 'https://esm.sh/@inrupt/solid-client-authn-browser'
+import solidClient from 'https://esm.sh/@inrupt/solid-client'
+import solidVocab from 'https://esm.sh/@inrupt/vocab-common-rdf'
 
 import './rainbow-button.js'
 import handleKonami from './konami-kid.js'
