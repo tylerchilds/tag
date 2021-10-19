@@ -1,5 +1,2 @@
-import {
-  copySync,
-} from "https://deno.land/std@0.96.0/fs/mod.ts"
-
-copySync("./src", "./dist", { overwrite: true })
+import { exec } from "https://deno.land/x/exec/mod.ts";
+await exec('zip -r dist/tag.zip dist');
