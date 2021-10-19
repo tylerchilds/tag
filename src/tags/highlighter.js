@@ -1,4 +1,4 @@
-import tag from '../tag.js'
+import tag from '../tag.bundle.js'
 const highlighter = tag('highlighter')
 
 const defaultColor = 'yellow'

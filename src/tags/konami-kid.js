@@ -1,4 +1,4 @@
-import tag from '../tag.js'
+import tag from '../tag.bundle.js'
 import start from '../games/qftgu.js'
 
 let onKonami = defaultHack
