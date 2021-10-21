@@ -8,7 +8,7 @@ Write complex JavaScript applications without complexity.
 
 ### Clone the repository
 
-$ `git clone  https://git.thelanding.page/tlp/tag.git`
+$ `git clone  https://git.sr.ht/~tychi/tag`
 
 ### Navigate into the directory
 
