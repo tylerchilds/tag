@@ -27,7 +27,7 @@
     `
   })
 
-  on('keydown', 'input', event => {
+  on('keyup', 'input', event => {
     const nickname = event.target.value;
     set({ nickname })
   })
