@@ -2,9 +2,10 @@ import ion from './vendor/ion/app.js'
 
 let virtualDOM
 let equal = (a, b) => a === b
+
 const cleanStates = {}
 
-const render = (target, html) => {
+const dom = (target, html) => {
   if(virtualDOM) {
     virtualDOM(target, html)
   } else {
@@ -12,28 +13,31 @@ const render = (target, html) => {
   }
 }
 
-async function html(slug, callback, dependencies = []) {
-  ion.on('render', slug, (event) => {
-    const { id } = event.target
+async function render(selector, callback, dependencies = []) {
+  ion.on('render', selector, (event) => {
+    const id = [...event.target.attributes]
+      .reduce((data, x) => {
+        return `${data}${x.name}${x.value}`
+      }, '')
 
-    if(clean(id, slug, dependencies)) return
+    if(clean(id, selector, dependencies)) return
 
-    const { loaded } = get(slug)
+    const { loaded } = read(selector)
 
     if(!loaded) return;
 
     const html = callback(event.target)
-    if(html) render(event.target, html)
+    if(html) dom(event.target, html)
   })
 
   const { innerHTML } = await import('https://esm.sh/diffhtml')
   virtualDOM = innerHTML
 }
 
-function css(slug, stylesheet) {
+function style(selector, stylesheet) {
   const styles = `
-    <style type="text/css" data-tag=${slug}>
-      ${stylesheet.replaceAll('&', slug)}
+    <style type="text/css" data-tag=${selector}>
+      ${stylesheet.replaceAll('&', selector)}
     </style>
   `;
 
@@ -42,36 +46,36 @@ function css(slug, stylesheet) {
       .insertAdjacentHTML("beforeend", styles)
 }
 
-function get(slug) {
-  return ion.get(slug) || {}
+function read(selector) {
+  return ion.get(selector) || {}
 }
 
-function set(slug, payload, middleware) {
-  ion.set(slug, payload, middleware)
+function write(selector, payload, middleware) {
+  ion.set(selector, payload, middleware)
 }
 
-function on(slug, eventName, selector, callback) {
-  ion.on(eventName, `${slug} ${selector}`, callback)
+function on(selector1, eventName, selector2, callback) {
+  ion.on(eventName, `${selector1} ${selector2}`, callback)
 }
 
-function restore(slug, initialState) {
-  const promise = ion.restore(slug)
+function restore(selector, initialState) {
+  const promise = ion.restore(selector)
   promise.then(state => {
-    set(slug, { ...initialState, ...state, loaded: true })
+    write(selector, { ...initialState, ...state, loaded: true })
   })
-  set(slug, initialState)
+  write(selector, initialState)
   return promise
 }
 
-function clean(id, slug, ...more) {
-  const slugs = [slug, ...more]
+function clean(id, selector, ...more) {
+  const selectors = [selector, ...more]
   const cacheIndex = `${id}${new Error().stack}`
 
   const cache = cleanStates[cacheIndex] || (function init(){
     return cleanStates[cacheIndex] = {}
   })()
 
-  return slugs.every(x => {
+  return selectors.every(x => {
     const previous = cache[x]
     const current = ion.get(x)
     const same = equal(previous, current)
@@ -81,7 +85,7 @@ function clean(id, slug, ...more) {
   })
 }
 
-export default function tag(slug, initialState = {}) {
+export default function tag(selector, initialState = {}) {
   let thisTagReady = false
 
   function ready(hook) {
@@ -91,16 +95,26 @@ export default function tag(slug, initialState = {}) {
     hook()
   }
 
-  restore(slug, initialState).then(() => thisTagReady = true)
+  restore(selector, initialState).then(() => thisTagReady = true)
 
   return {
     ready,
-    slug,
-    css: css.bind(null, slug),
-    get: get.bind(null, slug),
-    html: html.bind(null, slug),
-    on: on.bind(null, slug),
-    set: set.bind(null, slug),
+    selector,
+    read: read.bind(null, selector),
+    render: render.bind(null, selector),
+    style: style.bind(null, selector),
+    on: on.bind(null, selector),
+    write: write.bind(null, selector),
+
+    /* deprecated */
+    slug: selector,
+    css: style.bind(null, selector),
+    html: render.bind(null, selector),
+    get: read.bind(null, selector),
+    restore: function() {
+      console.error('#tag.restore() was deprecated. please use #tag.ready instead.')
+    },
+    set: write.bind(null, selector),
   }
 }
 

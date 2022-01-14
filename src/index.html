@@ -148,13 +148,13 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
     <h2>Documentation</h2>
     <p>
     <code>
-      <strong>tag(slug: string [, state: object]) : object</strong>
+      <strong>tag(selector: string [, state: object]) : object</strong>
     </code>
     <p>
-    Creates an custom, scoped HTML tag. Requires a slug, which is a CSS selector as a string. An optional second argument may be passed for seeding the initial state.
+    Creates an custom, scoped HTML tag. Requires a selector: a CSS selector. An optional second argument may be passed for seeding the initial state.
     </p>
     <p>
-    It will return an object with the slug as an attribute and the following namespaced functions.
+    It will return an object with the selector as an attribute and the following namespaced functions.
     </p>
     </p>
     <details>
@@ -163,29 +163,29 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
       </summary>
       <br/>
       <dl>
-        <dt><code>html(function(target: EventTarget))</code></dt>
+        <dt><code>render(function(target: EventTarget))</code></dt>
         <dd>
         Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
         </dd>
-        <dt><code>css(stylesheet: string)</code></dt>
+        <dt><code>style(stylesheet: string)</code></dt>
         <dd>
         Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
         </dd>
         <dt><code>on(eventType, selector, function(event)) : function</code></dt>
         <dd>
-        An event delegator that expects three arguments. An event type, a css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
+        An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
         </dd>
-        <dt><code>get() : object</code></dt>
+        <dt><code>read() : object</code></dt>
         <dd>
         Returns the current state.
         </dd>
-        <dt><code>set(payload [, function(state, payload)])</code></dt>
+        <dt><code>write(payload [, function(state, payload)])</code></dt>
         <dd>
         Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
         </dd>
-        <dt><code>restore() : promise(state)</code></dt>
+        <dt><code>ready(function()) : void</code></dt>
         <dd>
-        Recovers the previous state allowing for persisting data across page refreshes. Called automatically when a new tag is initialized. Returns a promise with the tag's state.
+        The provided callback will be invoked when the tag is ready: once data has been restored from the database.
         </dd>
       </dl>
     </details>
@@ -357,11 +357,11 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
         function openAccordion () {
           accordion.set({ open: true })
-          document.querySelector(accordion.slug)
+          document.querySelector(accordion.selector)
             .setAttribute('open', 'true')
         }
 
-        accordion.restore().then(() => {
+        accordion.ready(() => {
           const { open } = accordion.get()
 
           if(open) openAccordion()
