@@ -1,15 +1,18 @@
 /*
   Author: Tyler Childs (network@tychi.me)
-  Copyright: Netflix, Inc. (https://netflix.com)
   License: MIT
-  Date: 2021-19-03
+  Copyright Dates:
+    2021-19-03 Netflix, Inc. (https://netflix.com)
+    2022-15-01 Tyler Childs
  */
+import uuidv4 from '../../uuidv4.js';
 const renderEvent = new Event('render');
+const mountEvent = new Event('mount');
 
 let selectors = []
 
 export function observe(selector) {
-  selectors = [...selectors, selector];
+  selectors = [...new Set([...selectors, selector])];
   render();
 }
 
@@ -36,7 +39,14 @@ function getSubscribers(node) {
 }
 
 function dispatchRender(subscribers) {
-  subscribers.map(s => s.dispatchEvent(renderEvent));
+  subscribers.map(s => {
+    if(!s.mounted) {
+      s.mounted = true
+      if(!s.id) s.id = uuidv4()
+      s.dispatchEvent(mountEvent)
+    }
+    s.dispatchEvent(renderEvent)
+  });
 }
 
 const config = { childList: true, subtree: true };

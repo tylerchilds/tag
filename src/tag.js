@@ -13,6 +13,13 @@ const dom = (target, html) => {
   }
 }
 
+function mount(selector, callback) {
+  ion.on('mount', selector, (event) => {
+    console.log(event.target.id)
+    callback(event.target)
+  })
+}
+
 async function render(selector, callback, dependencies = []) {
   ion.on('render', selector, (event) => {
     const id = [...event.target.attributes]
@@ -91,6 +98,7 @@ export default function tag(selector, initialState = {}) {
   function ready(hook) {
     if(!thisTagReady) {
       requestAnimationFrame(() => ready(hook))
+			return
     }
     hook()
   }
@@ -100,6 +108,7 @@ export default function tag(selector, initialState = {}) {
   return {
     ready,
     selector,
+    mount: mount.bind(null, selector),
     read: read.bind(null, selector),
     render: render.bind(null, selector),
     style: style.bind(null, selector),

@@ -9,13 +9,9 @@
 <script type="module">
   import tag from './tag.js'
 
-  const { html, css, get, set } = tag('hello-map')
+  const { render, mount, css, get, set } = tag('hello-map')
 
-  html(target => {
-    target.map
-      ? update(target.map)
-      : initialize(target)
-  })
+  mount(initialize)
 
   function initialize(target) {
     const container = document.createElement('div')
@@ -46,6 +42,7 @@
         'icon-image': 'rocket_15'
       }
     }) 
+    render(update)
   }
 
   async function pollDrone(url) {
@@ -56,14 +53,16 @@
     set({ drone })
   }
 
-  function update(map) {
-    const { drone } = get()
+  function update({ map }) {
+    if(!!map.getSource) {
+      const { drone } = get()
 
-    map.getSource('drone').setData(drone)
-    map.flyTo({
-      center: drone.geometry.coordinates,
-      speed: .5
-    })
+      map.getSource('drone').setData(drone)
+      map.flyTo({
+        center: drone.geometry.coordinates,
+        speed: .5
+      })
+    }
   }
 
   css(`
