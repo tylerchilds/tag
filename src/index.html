@@ -346,33 +346,58 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
     <script type="module">
       import tag from './tag.bundle.js'
 
-        tag('#details-link').on('click', '', openAccordion)
+      tag('#details-link').on('click', '', openAccordion)
 
-        const accordion = tag('details')
+      const accordion = tag('details')
 
-        accordion.on('click', 'summary', function toggle() {
-          const { open } = accordion.get()
-          accordion.set({ open: ! open })
-        })
+      accordion.on('click', 'summary', function toggle() {
+        const { open } = accordion.get()
+        accordion.set({ open: ! open })
+      })
 
-        function openAccordion () {
-          accordion.set({ open: true })
-          document.querySelector(accordion.selector)
-            .setAttribute('open', 'true')
-        }
+      function openAccordion () {
+        accordion.set({ open: true })
+        document.querySelector(accordion.selector)
+          .setAttribute('open', 'true')
+      }
 
-        accordion.ready(() => {
-          const { open } = accordion.get()
+      accordion.ready(() => {
+        const { open } = accordion.get()
 
-          if(open) openAccordion()
-        })
+        if(open) openAccordion()
+      })
     </script>
     <script src="./tags/highlighter.js" type="module"></script>
     <script src="./tags/rainbow-button.js" type="module"></script>
     <script type="module">
       import handleKonami from './tags/konami-kid.js'
-      import start from './games/qftgu.js'
-      handleKonami(start)
+      handleKonami(async () => {
+        document.body.innerHTML = `
+          <guitar-hero></guitar-hero>
+        `
+
+        const {
+          default: guitarHero
+        } = await import('../games/guitar-hero.js')
+
+        guitarHero.style(`
+          * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+          }
+          body {
+            all: unset;
+          }
+          & {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100vh;
+            place-items: center;
+            width: 100vw;
+          }
+        `)
+      })
     </script>
   </body>
 </html>
