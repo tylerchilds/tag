@@ -175,6 +175,13 @@ function playNote(_$, flags) {
 }
 
 $.style(`
+  & {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+    width: 100vw;
+    place-items: center;
+  }
   & .note {
     font-size: 10vh;
   }
