@@ -5,397 +5,197 @@
     <title>Tag</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
 
     <style type="text/css">
       @font-face {
-        font-family: 'Fira Code';
-        src: url('FiraCode-VF.ttf') format("truetype-variations");
-        font-weight: 1 999;
+        font-family: 'BerkeleyMono';
+        src: url('BerkeleyMonoVariable-Regular.ttf') format("truetype-variations");
+        font-weight: 100 700;
       }
 
       @font-face {
-        font-family: 'STIXTwoText';
-        src: url('STIXTwoText[wght].ttf') format("truetype-variations");
-        font-weight: 400 700;
-      }
-
-      @font-face {
-        font-family: 'STIXTwoText';
-        src: url('STIXTwoText-Italic[wght].ttf') format("truetype-variations");
+        font-family: 'BerkeleyMono';
+        src: url('BerkeleyMonoVariable-Italic.ttf') format("truetype-variations");
         font-style: italic;
       }
 
-      html {
-        background: oldlace;
-        font-size: 1.1em;
-        font-family: 'STIXTwoText';
-      }
-      body {
-        line-height: 1.5;
-        max-width: 45rem;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-        overflow-x: hidden;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
-      *:focus {
-        border-radius: none;
-        outline: 2px dashed orange;
-        outline-offset: .5rem;
-      }
+			html, body { height: 100%; }
 
-      h2 {
-        margin-top: 5rem;
-      }
+			html,
+			body {
+				background: black;
+				box-sizing: border-box;
+				color: orange;
+				font-family: 'BerkeleyMono';
+			}
 
-      h3 {
-        margin-top: 3rem;
-      }
+			body {
+				border: 1px solid orange;
+				width: calc(100% - 2px);
+			}
 
-      hr {
-        border: none;
-        border-top: 1px dashed orange;
-        margin-top: 3rem;
-      }
+			hr {
+				background: green;
+			}
 
-      nav {
-        border-top: 1px dashed orange;
-        border-bottom: 1px dashed orange;
-        padding: 1rem;
-        margin: 3rem 0;
-        font-style: italic;
-      }
+			a:link {
+				color: white !important;
+			}
 
-      pre,
-      code {
-        background: papayawhip;
-        border: 1px dashed orange;
-        font-family: 'Fira Code';
-        font-size: 1.1em;
-      }
-
-      xmp {
-        font-family: 'Fira Code';
-      }
-
-      pre {
-        padding: 1rem 2rem;
-        margin-bottom: 2rem;
-        overflow-x: auto;
-      }
-
-      code {
-        display: inline-block;
-        padding: 2px .5rem;
-      }
-
-      dt {
-        margin-bottom: .5rem;
-      }
-
-      dd {
-        margin-bottom: 2rem;
-      }
+			a:visited {
+				color: orange !important;
+			}
     </style>
   </head>
 
   <body>
-    <center>
-      <h1><code>&lt;tag&gt;</code></h1>
-      <p>
-      The portable port-able part of the web for the whole wide world
-      </p>
-
-      <rainbow-button>
-        <a href="./tag.zip" class="rainbow-button">
-          Download Now
-        </a>
-      </rainbow-button>
-
-      <nav>
-        View <a href="#documentation" id="details-link">Documentation</a>
-        and <a href="#examples">Examples</a>.
-        Or learn <a href="#author">about the author</a>.
-      </nav>
-    </center>
-
-    <p style="font-size: 1.5em">
-    <strong>Tag provides a unified approach for</strong>
-    <highlighter color="orange">rendering</highlighter>,
-    <highlighter color="rebeccapurple">scoped styles</highlighter>,
-    <highlighter color="lime">event delegation</highlighter>,
-    <highlighter color="dodgerblue">state management</highlighter>,
-    and <strong>only those four things</strong>.
-    Plainly, Tag is a <a href="https://developer.mozilla.org/en-US/docs/Web/javascript">trifecta</a> of 
-    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML">fundamental</a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">techonolgies</a>
-    designed to build expressive web applications.
-    </p>
-
-    <hr />
-
-    <h2>Quick Start <a href="./hello-world.html">View Example</a></h2>
-    <p>
-    Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets to be the content to 'Hello World!'
-    </p>
-    <pre><xmp>import tag from 'https://thelanding.page/tag/tag.js'
-tag('hello-world').html(() => 'Hello World!')</xmp></pre>
-
-    <p><em>
-      <strong>Tip!</strong> View the source of the example page to see &lt;hello-world&gt; in action!
-    </em></p>
-    <a name="documentation"></a>
-    <h2>Documentation</h2>
-    <p>
-    <code>
-      <strong>tag(selector: string [, state: object]) : object</strong>
-    </code>
-    <p>
-    Creates an custom, scoped HTML tag. Requires a selector: a CSS selector. An optional second argument may be passed for seeding the initial state.
-    </p>
-    <p>
-    It will return an object with the selector as an attribute and the following namespaced functions.
-    </p>
-    </p>
-    <details>
-      <summary class="rainbow-button">
-        Toggle Visibility of returned object properties.
-      </summary>
-      <br/>
-      <dl>
-        <dt><code>render(function(target: EventTarget))</code></dt>
-        <dd>
-        Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
-        </dd>
-        <dt><code>style(stylesheet: string)</code></dt>
-        <dd>
-        Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
-        </dd>
-        <dt><code>on(eventType, selector, function(event)) : function</code></dt>
-        <dd>
-        An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
-        </dd>
-        <dt><code>read() : object</code></dt>
-        <dd>
-        Returns the current state.
-        </dd>
-        <dt><code>write(payload [, function(state, payload)])</code></dt>
-        <dd>
-        Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
-        </dd>
-        <dt><code>ready(function()) : void</code></dt>
-        <dd>
-        The provided callback will be invoked when the tag is ready: once data has been restored from the database.
-        </dd>
-      </dl>
-    </details>
-
-    <p>
-    <strong>Dependencies:</strong> There is one third-party dependency, <a href="https://diffhtml.org/">diffHTML</a>.
-    </p>
-    <p>
-    <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
-    </p>
-
-    <hr />
-
-    <a name="examples"></a>
-    <h2>Examples</h2>
-    <h3><code>&lt;hello-name&gt;</code> <a href="./hello-name.html">View Example</a></h3>
-    <p>
-    The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
-    </p>
-
-    <pre><xmp><!-- hello-name.html -->
-<hello-name></hello-name>
-
-<script type="module">
-  import tag from './tag.js'
-
-  const { html, get } = tag('hello-name', {
-    'name': 'Earth'
-  })
-
-  html(() => {
-    const { name } = get()
-
-    return `Hello ${name}`
-  })
-</script></xmp></pre>
-
-    <dl>
-      <!-- hello-nickname -->
-      <dt><code>&lt;hello-nickname&gt;</code> <a href="./hello-nickname.html">View Example</a></dt>
-      <dd>
-      Demonstrates local two-way data binding and persisting updates across page reloads.
-      </dd>
-
-      <!-- hello-universe -->
-      <dt><code>&lt;hello-universe&gt;</code> <a href="./hello-universe.html">View Example</a></dt>
-      <dd>
-      An application for managing planet information and viewing a sequential representation of our solar system.
-      </dd>
-
-      <!-- hello-gallery -->
-      <dt><code>&lt;hello-gallery&gt;</code> <a href="./hello-gallery.html">View Example</a></dt>
-      <dd>
-      A static photo gallery that upgrades to a carousel with progressive enhancement.
-      </dd>
-
-      <!-- hello-editor -->
-      <dt><code>&lt;hello-editor&gt;</code> <a href="./hello-editor.html">View Example</a></dt>
-      <dd>
-      What-You-See-Is-What-You-Get style content editing with <a href="https://quilljs.com/">QuillJS</a>.
-      </dd>
-
-      <!-- hello-map -->
-      <dt><code>&lt;hello-map&gt;</code> <a href="./hello-map.html">View Example</a></dt>
-      <dd>
-      A <a href="https://maplibre.org">maplibre.org</a> integration that incorporates live realtime data. A direct port of <a href="https://maplibre.org/maplibre-gl-js-docs/example/live-geojson/">this example from their official docs</a>.
-      </dd>
-
-      <!-- hello-reddit -->
-      <dt><code>&lt;hello-reddit&gt;</code> <a href="./hello-reddit.html">View Example</a></dt>
-      <dd>
-      A <a href="https://old.reddit.com">reddit</a> integration that exposes their API over HTML. Control which subreddits are queried and how they are sorted with attributes.
-      </dd>
-
-      <!-- hello-launcher -->
-      <dt><code>&lt;hello-launcher&gt;</code> <a href="./hello-launcher.html">View Example</a></dt>
-      <dd>
-      An application that opens and manages other applications. Inspired by and a prototype for <a href="https://forum.solidproject.org/t/idea-launcher-app/3468">this forum post</a>.
-      </dd>
-
-      <!-- window-pane -->
-      <dt><code>&lt;window-pane&gt;</code> <a href="./window-pane.html">View Example</a></dt>
-      <dd>
-      The foundation for a minimal window manager using a CSS stylesheet that replicates <a href="https://khang-nd.github.io/7.css/">Windows 7</a>.
-      </dd>
-
-      <!-- solid-todo -->
-      <dt><code>&lt;solid-todo&gt;</code> <a href="./solid-todo.html">View Example</a></dt>
-      <dd>
-      A work-in-progress <a href="https://todomvc.com/">TodoMVC</a> application that utilizes <a href="https://solidproject.org">Solid</a> as a backend.
-      </dd>
-
-      <!-- solid-user -->
-      <dt><code>&lt;solid-user&gt;</code> <a href="./solid-user.html">View Example</a></dt>
-      <dd>
-      A  <a href="https://solidproject.org">Solid POD</a> authenticator. This allows people to connect to their preferred identity provider.
-      <br/><strong>Tip!</strong> Enter the <a href="https://en.wikipedia.org/wiki/Konami_Code">Konami Code</a> for a suprise! Enter it again for more!
-      </dd>
-    </dl>
-
-    <hr />
-
-    <a name="author"></a>
-    <div style="float: right; max-width: 240px; border: 2px orange dashed; padding: 1rem; margin: 4rem 0 1rem 1rem;">
-      <h3 style="margin-top: 0;">Inspirations</h3>
-      <p>
-      Inspiring people building interesting projects are everywhere. These links helped shape Tag's development by just being cool things on the internet.
-      </p>
-      <ul>
-        <li>
-          <a href="https://small-tech.org">Small Technology Foundation</a>
-        </li>
-        <li>
-          <a href="https://solidproject.org/">Solid Project</a>
-        </li>
-        <li>
-          <a href="https://spritelyproject.org/">Spritely Project</a>
-        </li>
-        <li>
-          <a href="https://100r.co">Hundredrabbits</a>
-        </li>
-        <li>
-          <a href="https://safenetwork.tech/">Safe Network</a>
-        </li>
-        <li>
-          <a href="https://owncast.online/">Owncast</a>
-        </li>
-      </ul>
-    </div>
-
-
-    <h2>About the Author</h2>
-    <p>
-    <a href="https://tylerchilds.com">Tyler Childs</a> is a netizen with a deep passion for the open web and radical transparency. He believes everyone can go further together and sharing knowledge is critical to group success.
-    </p>
-
-    <p>
-    Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>.
-    </p>
-
-    <p>
-    You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
-    </p>
-    <p><strong>Fun fact!</strong> <a href="https://thelanding.page/tag">Tag</a> is the final part in a now-complete solo trilogy. <a href="https://www.tylerchilds.com/projects/vanilla-html/">Vanilla HTML</a> was a flop in 2013 and <a href="https://www.cutestrap.com/">Cutestrap</a> was a cult-hit in 2016!
-    <h2>Source Code</h2>
-    <p>
-    Available on
-    <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
-    under the MIT license.
-    </p>
-
-    <footer>
-      <center style="font-style: italic; color: grey;">
-        Established: 2021. Last updated: 2021/10/19 (YYYY/MM/DD)
-      </center>
-    </footer>
+    <manuscript id="index"></manuscript>
 
     <script type="module">
+      import Quill from 'https://esm.sh/quill@1.3.6'
       import tag from './tag.bundle.js'
+      window.tag = tag
 
-      tag('#details-link').on('click', '', openAccordion)
+      const path = window.location.pathname
+      const hostname = window.location.hostname
 
-      const accordion = tag('details')
-
-      accordion.on('click', 'summary', function toggle() {
-        const { open } = accordion.get()
-        accordion.set({ open: ! open })
-      })
-
-      function openAccordion () {
-        accordion.set({ open: true })
-        document.querySelector(accordion.selector)
-          .setAttribute('open', 'true')
+      const ENV = {
+        PROD: 'production',
+        DEV: 'development',
+        SAFE: 'safe'
       }
 
-      accordion.ready(() => {
-        const { open } = accordion.get()
+      const env = {
+        prod: 'production',
+        dev: 'development',
+        SAFE: 'safe'
+      }
 
-        if(open) openAccordion()
-      })
-    </script>
-    <script src="./tags/highlighter.js" type="module"></script>
-    <script src="./tags/rainbow-button.js" type="module"></script>
-    <script type="module">
-      import handleKonami from './tags/konami-kid.js'
-      handleKonami(async () => {
-        document.body.innerHTML = `
-          <guitar-hero></guitar-hero>
-        `
+      const environments = {
+        "": ENV.SAFE,
+        "localhost": ENV.DEV,
+      }
 
-        const {
-          default: guitarHero
-        } = await import('../games/guitar-hero.js')
+      const flags = {
+        mode: environments[hostname] || ENV.PROD,
 
-        guitarHero.style(`
-          * {
-            box-sizing: border-box;
-            padding: 0;
-            margin: 0;
-          }
-          body {
-            all: unset;
-          }
-          & {
-            display: grid;
-            height: 100vh;
-            width: 100vw;
-          }
+        path: path.split('/').slice(0, -1).join('/'),
+        syncInterval: 30000 // every 30 seconds
+      }
+
+      const emptyEditor = {
+        delta: {},
+        rawHTML: ""
+      }
+
+      const $ = tag('manuscript')
+
+      mount($, flags)
+      berkeley($, flags)
+
+      function mount($, flags) {
+        $.mount((target) => {
+          $.ready(() => initialize(target, $, flags))
+        })
+      }
+
+      function initialize(target, $, flags) {
+        const { id } = target
+        const { delta, rawHTML, mode } = editorById(id)
+
+        if(mode === 'view') {
+          return rawHTML
+        }
+
+        editor(target, delta)
+				target.editor.focus()
+      }
+
+      function editor(target, delta) {
+        if(! target.editor) {
+          const container = document.createElement('div')
+          target.appendChild(container)
+
+          target.editor = new Quill(container, { theme: 'bubble' })
+          target.editor.setContents(delta)
+          target.editor.on('editor-change', update(target))
+        }
+      }
+
+      function update(target) {
+        const { id } = target
+
+        return function updateEditor() {
+          const delta = target.editor.getContents()
+          const rawHTML = target.editor.root.innerHTML
+
+					console.log(rawHTML)
+
+          $.write({
+            [id]: { delta, rawHTML }
+          })
+        }
+      }
+
+      export function editorById(id) {
+        return $.read()[id] || emptyEditor
+      }
+
+      function berkeley($, flags) {
+        $.style(`
+					& {
+						display: block;
+            font-family: 'BerkeleyMono';
+					}
+          & .ql-toolbar.ql-bubble,
+          & .ql-container.ql-bubble,
+          & .ql-toolbar.ql-snow,
+          & .ql-container.ql-snow {
+            font-family: 'BerkeleyMono';
+						font-weight: 100;
+					}
+					& .ql-header {
+						position: relative;
+					}
         `)
-      })
+      }
     </script>
+		<style>
+			/* scanlines */
+			html::after {
+				content: " ";
+				display: block;
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background: rgba(18, 16, 16, 0.1);
+				opacity: 0;
+				z-index: 2;
+				pointer-events: none;
+			}
+			html::before {
+				content: " ";
+				display: block;
+				position: fixed;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				background: linear-gradient(rgba(255, 255, 255, .2) 50%, rgba(0, 0, 0, 0) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+				z-index: 2;
+				background-size: 100% 2px, 3px 100%;
+				pointer-events: none;
+			}
+    </style>
   </body>
 </html>
