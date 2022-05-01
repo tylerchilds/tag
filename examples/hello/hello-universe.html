@@ -36,15 +36,9 @@
   </hello-universe>
 
   <script type="module">
-    import tag from './tag.js'
+    import tag from '../../mod.js'
 
-    const {
-      html,
-      get,
-      on,
-      set,
-      css
-    } = tag('hello-universe', {
+    const $ = tag('hello-universe', {
       // set an initial array of planets
       'planets': [
         {
@@ -96,13 +90,13 @@
 
     // increase our tick twice a second (once every 500 milliseconds)
     setInterval(function tick() {
-      const { tick } = get()
-      set({ tick: tick + 1 })
+      const { tick } = $.read()
+      $.write({ tick: tick + 1 })
     }, 500)
 
-    html(() => {
+    $.render(() => {
       // pluck our current values from our current state
-      const { planets, tick, showAdmin } = get()
+      const { planets, tick, showAdmin } = $.read()
 
       // get the current planet by modulo of current tick by # of planets
       const current = planets[tick % planets.length]
@@ -133,15 +127,15 @@
     })
 
     // toggle the showAdmin variable on button click
-    on('click', 'button.admin-toggle', () => {
-      const showAdmin = ! get().showAdmin
-      set({ showAdmin })
+    $.on('click', 'button.admin-toggle', () => {
+      const showAdmin = ! $.read().showAdmin
+      $.write({ showAdmin })
     })
 
     // create a random planet with the current tick as a seed
-    on('click', 'button.add-planet', () => {
-      const { tick } = get()
-      set({
+    $.on('click', 'button.add-planet', () => {
+      const { tick } = $.read()
+      $.write({
         id: `planet-${tick}`,
         name: `Planet ${tick}`,
         background: 'cornsilk'
@@ -160,11 +154,11 @@
     }
 
     // update planet information when input values have been changed
-    on('keyup', 'admin input', (event) => {
+    $.on('keyup', 'admin input', (event) => {
       const { value, dataset } = event.target
       const { id, attribute } = dataset
 
-      set({
+      $.write({
         id,
         attribute,
         value
@@ -173,7 +167,7 @@
 
     // return the index of the planet with a given id
     function getPlanetIndexById(id) {
-      const index = get().planets
+      const index = $.read().planets
         .findIndex(x => x.id === id)
 
       return index
@@ -220,7 +214,7 @@
     }
 
     // create scoped rulesets for all of our content
-    css(`
+    $.style(`
       & {
         display: block;
         margin: 0 auto;

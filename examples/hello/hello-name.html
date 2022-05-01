@@ -3,17 +3,17 @@
 
 <script type="module">
   // import the tag library
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
   // create a new tag called hello-name
   // and set the initial state
-  const { html, get } = tag('hello-name', {
+  const $ = tag('hello-name', {
     'name': 'Earth'
   })
 
-  html(() => {
+  $.render(() => {
     // get the name from current state
-    const { name } = get()
+    const { name } = $.read()
 
     // interpolate the name variable into tag content
     return `Hello ${name}`

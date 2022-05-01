@@ -1,20 +1,14 @@
 <hello-nickname></hello-nickname>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
-  const {
-    html,
-    get,
-    on,
-    set,
-    css
-  } = tag('hello-nickname', {
+  const $ = tag('hello-nickname', {
     'nickname': 'Earthling'
   })
 
-  html(() => {
-    const { nickname } = get()
+  $.render(() => {
+    const { nickname } = $.read()
 
     return `
       <demo>
@@ -27,12 +21,12 @@
     `
   })
 
-  on('keyup', 'input', event => {
+  $.on('keyup', 'input', event => {
     const nickname = event.target.value;
-    set({ nickname })
+    $.write({ nickname })
   })
 
-  css(`
+  $.style(`
     & {
       display: block;
       margin: 0 auto;

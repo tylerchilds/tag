@@ -14,16 +14,16 @@
 </div>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
   const emptyEditor = {
     delta: {},
     rawHTML: ""
   }
 
-  const { html, get, set } = tag('hello-editor')
+  const $ = tag('hello-editor')
 
-  html(target => {
+  $.render(target => {
     const { key, mode } = target.dataset
     const { delta, rawHTML } = editorByKey(key)
 
@@ -52,13 +52,13 @@
       const delta = target.editor.getContents()
       const rawHTML = target.editor.root.innerHTML
 
-      set({
+      $.write({
         [key]: { delta, rawHTML }
       })
     }
   }
 
   export function editorByKey(key) {
-    return get()[key] || emptyEditor
+    return $.read()[key] || emptyEditor
   }
 </script>

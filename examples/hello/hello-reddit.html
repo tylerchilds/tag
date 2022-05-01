@@ -29,7 +29,7 @@
 </div>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
   const emptyReddit = {
     chilren: [],
@@ -37,16 +37,16 @@
     before: ""
   }
 
-  const { html, css, set, get, on } = tag('hello-reddit')
+  const $ = tag('hello-reddit')
 
   function redditById(id) {
-    return get()[id] || emptyReddit
+    return $.read()[id] || emptyReddit
   }
 
-  on('click', '.reset', paginate('reset'))
-  on('click', '.more', paginate('after'))
+  $.on('click', '.reset', paginate('reset'))
+  $.on('click', '.more', paginate('after'))
 
-  html(target => {
+  $.render(target => {
     const title = target.getAttribute('title') || 'Untitled'
     const { children = [], loading } = query(target)
 
@@ -100,7 +100,7 @@
     return (renderers[data.post_hint] || renderers['default'])(data)
   }
 
-  css(`
+  $.style(`
     & {
       border: 1px solid black;
       border-radius: 2px;
@@ -162,7 +162,7 @@
       await fetch(url)
         .then(res => res.json())
         .then(json => json.data)
-        .then(response => set({
+        .then(response => $.write({
           ...response,
           loading: false
         }, merge(target.id)))
@@ -177,7 +177,7 @@
         ? `&${key}=${state[key]}`
         : ''
 
-      set({ paginate: query, loading: true }, merge(id))
+      $.write({ paginate: query, loading: true }, merge(id))
       document.getElementById(id)
         .querySelector('ol').scrollTop = '0'
     }

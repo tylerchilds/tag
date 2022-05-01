@@ -1,4 +1,4 @@
-import ion from './vendor/ion/app.js'
+import ion from './src/vendor/ion/app.js'
 
 let virtualDOM
 let equal = (a, b) => a === b
@@ -37,7 +37,7 @@ async function render(selector, callback, dependencies = []) {
     if(html) dom(event.target, html)
   })
 
-  const { innerHTML } = await import('https://esm.sh/diffhtml')
+  const { innerHTML } = await import('https://esm.sh/diffhtml?bundle')
   virtualDOM = innerHTML
 }
 
@@ -114,18 +114,8 @@ export default function tag(selector, initialState = {}) {
     style: style.bind(null, selector),
     on: on.bind(null, selector),
     write: write.bind(null, selector),
-
-    /* deprecated */
-    slug: selector,
-    css: style.bind(null, selector),
-    html: render.bind(null, selector),
-    get: read.bind(null, selector),
-    restore: function() {
-      console.error('#tag.restore() was deprecated. please use #tag.ready instead.')
-    },
-    set: write.bind(null, selector),
   }
 }
 
-import('https://esm.sh/fast-equals@2.0.4')
+import('https://esm.sh/fast-equals@2.0.4?bundle')
   .then(({ deepEqual }) => equal = deepEqual)

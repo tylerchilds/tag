@@ -1,4 +1,4 @@
-import tag from '../tag.bundle.js'
+import tag from '../../mod.js'
 
 const TILES = {
   welcome,

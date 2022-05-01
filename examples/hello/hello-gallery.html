@@ -7,26 +7,20 @@
 </hello-gallery>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
   const emptyGallery = {
     images: [],
     position: 0
   }
 
-  const {
-    html,
-    get,
-    on,
-    set,
-    css
-  } = tag('hello-gallery')
+  const $ = tag('hello-gallery')
 
   const galleryById = (id) => {
-    return get()[id] || emptyGallery
+    return $.read()[id] || emptyGallery
   }
 
-  html((target) => {
+  $.render((target) => {
     const { id } = target
     const { images, position } = galleryById(id)
 
@@ -48,10 +42,10 @@
     `
   })
 
-  on('click', '.back', step(-1))
-  on('click', '.next', step(+1))
+  $.on('click', '.back', step(-1))
+  $.on('click', '.next', step(+1))
 
-  css(`
+  $.style(`
     & {
       display: block;
     }
@@ -76,7 +70,7 @@
 
       const index = mod((position + i), images.length)
 
-      set({
+      $.write({
         id,
         position: index
       }, merge)
@@ -103,7 +97,7 @@
       .map(img => ({ src: img.src, alt: img.alt }));
 
     if(images.length > 0) {
-      set({ id, images }, merge)
+      $.write({ id, images }, merge)
     }
   }
 

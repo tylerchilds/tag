@@ -1,262 +1,133 @@
-import tag from 'https://thelanding.page/tag/tag.js'
-import trap from 'https://esm.sh/focus-trap'
+import tag from '../../mod.js'
 
-import solidClientAuthentication from 'https://esm.sh/@inrupt/solid-client-authn-browser'
-import solidClient from 'https://esm.sh/@inrupt/solid-client'
-import solidVocab from 'https://esm.sh/@inrupt/vocab-common-rdf'
+import solidClientAuthentication from 'https://esm.sh/@inrupt/solid-client-authn-browser@1.11.2?bundle'
+import SolidFileClient from 'https://esm.sh/solid-file-client@1.2.5?bundle'
 
-import './rainbow-button.js'
-import handleKonami from './konami-kid.js'
+const solidFileClient = new SolidFileClient(solidClientAuthentication);
 
-const session = solidClientAuthentication.getDefaultSession()
+solidFileClient.rdf.setPrefix('schemaorg', 'https://schema.org/');
 
-const initialState = {
-  sessionInfo: {},
-  profile: {},
-  myDataset: {},
-  name: 'Anonymous',
-  href: 'https://thelanding.page',
-  discover: 'Find anything...',
-  linkFilter: '',
-  links: [
-    ['Media Kraken', 'https://noeldemartin.github.io/media-kraken/login'],
-    ['Write.as', 'https://write.as'],
-    ['Owncast', 'https://owncast.online/'],
-    ['Todo List (alpha)', 'https://thelanding.page/tag/solid-todo.html'],
-    ['Hello Universe', 'https://thelanding.page/tag/hello-universe.html'],
-    ['Penny (developers)', 'https://penny.vincenttunru.com/'],
-    ['Tag (developers)', 'https://thelanding.page/tag/'],
-  ]
+const $ = tag('solid-user', {
+  loading: true,
+  user: null,
+})
+
+$.render(() => {
+  const { user, loading } = $.read()
+
+  if(loading) return `Loading...`
+
+  return user
+    ? `
+      <button id="logout-button" type="button">Log out</button>
+    `
+    : `
+      <button id="login-button" type="button">
+        Log in with Solid
+      </button>
+    `
+})
+
+$.on('click', '#login-button', () => {
+  const loginUrl = getLoginUrl();
+
+  if (!loginUrl)
+    return;
+
+  performLogin(loginUrl);
+})
+
+$.on('click', '#logout-button', async () => {
+  await performLogout();
+})
+
+$.ready(async () => {
+  $.write({ loading: true });
+  const user = await restoreSession();
+  $.write({ user, loading: false });
+})
+
+async function restoreSession() {
+  try {
+    await solidClientAuthentication.handleIncomingRedirect({ restorePreviousSession: true });
+
+    const session = solidClientAuthentication.getDefaultSession();
+
+    if (!session.info.isLoggedIn)
+      return false;
+
+    return await fetchUserProfile(session.info.webId);
+  } catch (error) {
+    alert(error.message);
+
+    return false;
+  }
 }
 
-export const { html, get, on, set, css, restore } = tag('solid-user', initialState)
+async function fetchUserProfile(webId) {
+  const [nameQuad] = await readSolidDocument(webId, null, { foaf: 'name' });
+  const [storageQuad] = await readSolidDocument(webId, null, { space: 'storage' });
 
-export function connect(event) {
-  event.preventDefault()
+  return {
+    url: webId,
+    name: nameQuad?.object.value || 'Anonymous',
+    storageUrl: storageQuad?.object.value || await findUserStorage(webId),
+  };
+}
 
-  session.login({
+async function readSolidDocument(url, source, predicate, object, graph) {
+  try {
+    // solidFileClient.rdf.query returns an array of statements with matching terms.
+    // (load and cache url content)
+    return await solidFileClient.rdf.query(url, source, predicate, object, graph);
+  } catch (error) {
+    return null;
+  }
+}
+
+async function findUserStorage(url) {
+  url = url.replace(/#.*$/, '');
+  url = url.endsWith('/') ? url + '../' : url + '/../';
+  url = new URL(url);
+
+  const response = await solidFileClient.head(url.href);
+
+  if (response.headers.get('Link')?.includes('<http://www.w3.org/ns/pim/space#Storage>; rel="type"'))
+    return url.href;
+
+  // Fallback for providers that don't advertise storage properly.
+  if (url.pathname === '/')
+    return url.href;
+
+  return findUserStorage(url.href);
+}
+
+
+function getLoginUrl() {
+  const url = prompt('Introduce your Solid login url');
+
+  if (!url)
+    return null;
+
+  const loginUrl = new URL(url);
+  loginUrl.hash = '';
+  loginUrl.pathname = '';
+
+  return loginUrl.href;
+}
+
+function performLogin(loginUrl) {
+  solidClientAuthentication.login({
+    oidcIssuer: loginUrl,
     redirectUrl: window.location.href,
-    oidcIssuer: 'https://broker.pod.inrupt.com/',
+    clientName: 'Hello World',
   });
 }
 
-export function disconnect() {
-  session.logout()
-  set({ ...initialState })
+async function performLogout() {
+  $.write({ user: null })
+  await solidClientAuthentication.logout();
 }
 
-async function load() {
-  const sessionInfo = await session.handleIncomingRedirect()
-  const { isLoggedIn, webId } = sessionInfo
 
-  if(isLoggedIn) {
-    set({ sessionInfo })
-    const profileDocumentURI = webId.split('#')[0];
-    const dataset = await solidClient.getSolidDataset(profileDocumentURI, {
-      fetch: solidClientAuthentication.fetch
-    });
-
-    set({ dataset })
-
-    const profile = solidClient.getThing(dataset, webId);
-
-    set({ profile })
-
-    const name = solidClient.getStringNoLocale(profile, solidVocab.FOAF.name)
-    set({ name })
-  }
-}
-
-load()
-
-/* Rendering */
-
-html(() => {
-  return `
-    ${background()}
-    ${foreground()}
-    ${profile()}
-  `
-})
-
-css(`
-  & {
-    display: block;
-  }
-`)
-
-on('click', 'foreground a', function superlink(event) {
-  const { href } = event.target
-  set({ href, sprung: false })
-  event.preventDefault()
-})
-
-on('keyup', '[name="link-filter"]', function filterLinks({ target }) {
-    const { value: linkFilter } = target
-    set({ linkFilter })
-})
-
-function foreground() {
-  const { sprung, links, linkFilter, discover } = get()
-  return `
-    <foreground class="${sprung ? 'sprung' : ''}">
-      <card-container>
-        <input name="link-filter" placeholder="${discover}" type="text" />
-        ${map(links, linkFilter)}
-      </card-container>
-    </foreground>
-  `
-}
-
-css(`
-  & foreground {
-    background: white;
-    overflow-y: auto;
-    inset: 0;
-    opacity: 0;
-    padding-bottom: 4rem;
-    position: fixed;
-    transition: opacity 200ms;
-    z-index: -1;
-  }
-
-  & card-container {
-    display: block;
-    margin: 1rem auto;
-    max-width: 32rem;
-  }
-
-  & foreground.sprung {
-    display: block;
-    opacity: 1;
-    z-index: 1;
-  }
-
-  & foreground input {
-    box-sizing: border-box;
-    display: block;
-    font-size: 1rem;
-    padding: 1rem;
-    position: sticky;
-    top: 1rem;
-    left: 1rem;
-    right: 1rem;
-    width: calc(100% - 2rem);
-  }
-
-  & foreground a {
-    display: inline-block;
-    font-size: 1.5rem;
-    margin: 1rem;
-    padding: 0 1rem;
-  }
-`)
-
-function map(links, filter) {
-  return links
-    .filter(algorithm(filter))
-    .map(([label, href]) => `<div>
-      <a href="${href}">${label}</a>
-    </div>`).join('')
-}
-
-function algorithm(filter) {
-  return ([label, href]) => {
-    return label.indexOf(filter) > -1 || href.indexOf(filter) > -1
-  }
-}
-
-function background() {
-  const { href } = get()
-  return `
-    <background>
-      <iframe src="${href}" style="width: 100%; height: 100%;"></iframe>
-    </background>
-  `
-}
-
-on('click', '#solid-connect', (e) => { connect(e); springbox() })
-on('click', '#solid-disconnect', (e) => { disconnect(e); springbox() })
-on('click', '#profile-button', springbox)
-
-function profile() {
-  const { name, sprung } = get()
-  const { isLoggedIn } = get().sessionInfo
-
-  const action = isLoggedIn
-    ? `<button id="solid-disconnect">Disconnect</button>`
-    : `<a id="solid-connect" href="https://broker.pod.inrupt.com/">Connect</a>`
-
-  return `
-    <profile class="${sprung ? 'sprung' : ''}">
-      <profile-actions>
-        ${action}
-      </profile-actions>
-      <profile-account>
-        <rainbow-button>
-          <a href="#" id="profile-button">
-            ${name}
-          </a>
-        </rainbow-button>
-      </profile-account>
-    </profile>
-  `
-}
-
-css(`
-  & profile {
-    display: grid;
-    grid-template-areas: 'profile';
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    min-width: 200px;
-    z-index: 2;
-  }
-
-  & rainbow-button {
-    display: block;
-    width: 100%;
-  }
-
-  & rainbow-button > *{
-    width: 100%;
-  }
-
-  & profile-account {
-    display: block;
-    grid-area: profile;
-    font-weight: bold;
-    transition: transform 200ms ease-in-out;
-    transform: scale(1)
-    transform-origin: center bottom;
-    z-index: 1
-  }
-
-  & profile-actions {
-    grid-area: profile;
-    transition: transform 200ms ease-in-out;
-    transform: translateY(0)
-  }
-
-  & .sprung profile-account {
-    transform: scale(1.05)
-  }
-
-  & .sprung profile-actions {
-    transform: translateY(-100%)
-  }
-`)
-
-function springbox() {
-  const { sprung } = get()
-  set({ sprung: !sprung })
-}
-
-handleKonami(async () => {
-  await import('./developer-tools.js')
-  document.body.insertAdjacentHTML("beforeend", "<developer-tools><solid-user></solid-user></developer-tools>")
-})
 

@@ -1,5 +1,5 @@
-import tag from '../tag.bundle.js'
-import start from '../games/qftgu.js'
+import tag from '../../mod.js'
+import start from '../../src/games/qftgu.js'
 
 let onKonami = defaultHack
 
@@ -28,15 +28,15 @@ function konamiListener({ keyCode }) {
 
 document.addEventListener('keydown', konamiListener)
 
-const { html, css, set } = tag('konami-kid')
+const $ = tag('konami-kid')
 
 function defaultHack() {
   document.body.innerHTML = '<konami-kid></konami-kid>'
-  set({ boop: true })
+  $.write({ boop: true })
   handleKonami(start)
 }
 
-html(target => {
+$.render(target => {
   return `
     <section class="layout">
       <div class="horizon"></div>

@@ -9,19 +9,19 @@
     <style type="text/css">
       @font-face {
         font-family: 'Fira Code';
-        src: url('FiraCode-VF.ttf') format("truetype-variations");
+        src: url('assets/FiraCode-VF.ttf') format("truetype-variations");
         font-weight: 1 999;
       }
 
       @font-face {
         font-family: 'STIXTwoText';
-        src: url('STIXTwoText[wght].ttf') format("truetype-variations");
+        src: url('assets/STIXTwoText[wght].ttf') format("truetype-variations");
         font-weight: 400 700;
       }
 
       @font-face {
         font-family: 'STIXTwoText';
-        src: url('STIXTwoText-Italic[wght].ttf') format("truetype-variations");
+        src: url('assets/STIXTwoText-Italic[wght].ttf') format("truetype-variations");
         font-style: italic;
       }
 
@@ -134,11 +134,11 @@
 
     <hr />
 
-    <h2>Quick Start <a href="./hello-world.html">View Example</a></h2>
+    <h2>Quick Start <a href="./hello/hello-world.html">View Example</a></h2>
     <p>
     Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets to be the content to 'Hello World!'
     </p>
-    <pre><xmp>import tag from 'https://thelanding.page/tag/tag.js'
+    <pre><xmp>import tag from 'https://deno.land/x/tag'
 tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
     <p><em>
@@ -201,7 +201,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
     <a name="examples"></a>
     <h2>Examples</h2>
-    <h3><code>&lt;hello-name&gt;</code> <a href="./hello-name.html">View Example</a></h3>
+    <h3><code>&lt;hello-name&gt;</code> <a href="./hello/hello-name.html">View Example</a></h3>
     <p>
     The Hello Name example shows the fundamentals of incorporating variables into the tag's state.
     </p>
@@ -210,7 +210,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 <hello-name></hello-name>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from 'https://deno.land/x/tag'
 
   const { html, get } = tag('hello-name', {
     'name': 'Earth'
@@ -225,64 +225,63 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
     <dl>
       <!-- hello-nickname -->
-      <dt><code>&lt;hello-nickname&gt;</code> <a href="./hello-nickname.html">View Example</a></dt>
+      <dt><code>&lt;hello-nickname&gt;</code> <a href="./hello/hello-nickname.html">View Example</a></dt>
       <dd>
       Demonstrates local two-way data binding and persisting updates across page reloads.
       </dd>
 
       <!-- hello-universe -->
-      <dt><code>&lt;hello-universe&gt;</code> <a href="./hello-universe.html">View Example</a></dt>
+      <dt><code>&lt;hello-universe&gt;</code> <a href="./hello/hello-universe.html">View Example</a></dt>
       <dd>
       An application for managing planet information and viewing a sequential representation of our solar system.
       </dd>
 
       <!-- hello-gallery -->
-      <dt><code>&lt;hello-gallery&gt;</code> <a href="./hello-gallery.html">View Example</a></dt>
+      <dt><code>&lt;hello-gallery&gt;</code> <a href="./hello/hello-gallery.html">View Example</a></dt>
       <dd>
       A static photo gallery that upgrades to a carousel with progressive enhancement.
       </dd>
 
       <!-- hello-editor -->
-      <dt><code>&lt;hello-editor&gt;</code> <a href="./hello-editor.html">View Example</a></dt>
+      <dt><code>&lt;hello-editor&gt;</code> <a href="./hello/hello-editor.html">View Example</a></dt>
       <dd>
       What-You-See-Is-What-You-Get style content editing with <a href="https://quilljs.com/">QuillJS</a>.
       </dd>
 
       <!-- hello-map -->
-      <dt><code>&lt;hello-map&gt;</code> <a href="./hello-map.html">View Example</a></dt>
+      <dt><code>&lt;hello-map&gt;</code> <a href="./hello/hello-map.html">View Example</a></dt>
       <dd>
       A <a href="https://maplibre.org">maplibre.org</a> integration that incorporates live realtime data. A direct port of <a href="https://maplibre.org/maplibre-gl-js-docs/example/live-geojson/">this example from their official docs</a>.
       </dd>
 
       <!-- hello-reddit -->
-      <dt><code>&lt;hello-reddit&gt;</code> <a href="./hello-reddit.html">View Example</a></dt>
+      <dt><code>&lt;hello-reddit&gt;</code> <a href="./hello/hello-reddit.html">View Example</a></dt>
       <dd>
       A <a href="https://old.reddit.com">reddit</a> integration that exposes their API over HTML. Control which subreddits are queried and how they are sorted with attributes.
       </dd>
 
       <!-- hello-launcher -->
-      <dt><code>&lt;hello-launcher&gt;</code> <a href="./hello-launcher.html">View Example</a></dt>
+      <dt><code>&lt;hello-launcher&gt;</code> <a href="./hello/hello-launcher.html">View Example</a></dt>
       <dd>
       An application that opens and manages other applications. Inspired by and a prototype for <a href="https://forum.solidproject.org/t/idea-launcher-app/3468">this forum post</a>.
       </dd>
 
       <!-- window-pane -->
-      <dt><code>&lt;window-pane&gt;</code> <a href="./window-pane.html">View Example</a></dt>
+      <dt><code>&lt;window-pane&gt;</code> <a href="./fun/window-pane.html">View Example</a></dt>
       <dd>
       The foundation for a minimal window manager using a CSS stylesheet that replicates <a href="https://khang-nd.github.io/7.css/">Windows 7</a>.
       </dd>
 
-      <!-- solid-todo -->
-      <dt><code>&lt;solid-todo&gt;</code> <a href="./solid-todo.html">View Example</a></dt>
-      <dd>
-      A work-in-progress <a href="https://todomvc.com/">TodoMVC</a> application that utilizes <a href="https://solidproject.org">Solid</a> as a backend.
-      </dd>
-
       <!-- solid-user -->
-      <dt><code>&lt;solid-user&gt;</code> <a href="./solid-user.html">View Example</a></dt>
+      <dt><code>&lt;solid-user&gt;</code> <a href="./solid/solid-user.html">View Example</a></dt>
       <dd>
       A  <a href="https://solidproject.org">Solid POD</a> authenticator. This allows people to connect to their preferred identity provider.
-      <br/><strong>Tip!</strong> Enter the <a href="https://en.wikipedia.org/wiki/Konami_Code">Konami Code</a> for a suprise! Enter it again for more!
+      </dd>
+
+      <!-- solid-todo -->
+      <dt><code>&lt;solid-todo&gt;</code> <a href="./solid/solid-todo.html">View Example</a></dt>
+      <dd>
+      A work-in-progress <a href="https://todomvc.com/">TodoMVC</a> application that utilizes <a href="https://solidproject.org">Solid</a> as a backend.
       </dd>
     </dl>
 
@@ -333,44 +332,44 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
     <h2>Source Code</h2>
     <p>
     Available on
-    <a href="https://git.thelanding.page/tlp/tag">Gitea</a>
-    under the MIT license.
+    <a href="https://github.com/tylerchilds/tag">GitHub</a> under the
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode">CC BY-SA 4.0</a>
     </p>
 
     <footer>
       <center style="font-style: italic; color: grey;">
-        Established: 2021. Last updated: 2021/10/19 (YYYY/MM/DD)
+        Established: 2021. Last updated: 2022/05/01 (YYYY/MM/DD)
       </center>
     </footer>
 
     <script type="module">
-      import tag from './tag.bundle.js'
+      import tag from '../mod.js'
 
       tag('#details-link').on('click', '', openAccordion)
 
       const accordion = tag('details')
 
       accordion.on('click', 'summary', function toggle() {
-        const { open } = accordion.get()
-        accordion.set({ open: ! open })
+        const { open } = accordion.read()
+        accordion.write({ open: ! open })
       })
 
       function openAccordion () {
-        accordion.set({ open: true })
+        accordion.write({ open: true })
         document.querySelector(accordion.selector)
           .setAttribute('open', 'true')
       }
 
       accordion.ready(() => {
-        const { open } = accordion.get()
+        const { open } = accordion.read()
 
         if(open) openAccordion()
       })
     </script>
-    <script src="./tags/highlighter.js" type="module"></script>
-    <script src="./tags/rainbow-button.js" type="module"></script>
+    <script src="../src/tags/highlighter.js" type="module"></script>
+    <script src="../src/tags/rainbow-button.js" type="module"></script>
     <script type="module">
-      import handleKonami from './tags/konami-kid.js'
+      import handleKonami from '../src/tags/konami-kid.js'
       handleKonami(async () => {
         document.body.innerHTML = `
           <guitar-hero></guitar-hero>
@@ -378,7 +377,7 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 
         const {
           default: guitarHero
-        } = await import('../games/guitar-hero.js')
+        } = await import('../src/games/guitar-hero.js')
 
         guitarHero.style(`
           * {

@@ -7,13 +7,21 @@
 <hello-map></hello-map>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
-  const { render, mount, css, get, set } = tag('hello-map')
+  const coordinates = [
+    [-70.285605, 41.651761],
+    [-122.290195, 37.528287],
+    [-70.729755, 42.014324],
+    [-122.496417, 37.606648]
+  ]
 
-  mount(initialize)
+  const $ = tag('hello-map', { center: coordinates[1], count: 0 })
+
+  $.mount(initialize)
 
   function initialize(target) {
+    const { center } = $.read()
     const container = document.createElement('div')
     container.classList.add('map')
     target.appendChild(container)
@@ -22,54 +30,49 @@
       container,
       style:
       'https://api.maptiler.com/maps/streets/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
-      zoom: 0
+      center,
+      zoom: 8
     })
 
     target.map.on('load', () => load(target.map))
   }
 
   function load(map) {
-    const url = 'https://wanderdrone.appspot.com/'
-    setInterval(() => pollDrone(url), 2000)
+    setInterval(() => jump(), 5000)
 
-    map.addSource('drone', { type: 'geojson', data: url })
-
-    map.addLayer({
-      'id': 'drone',
-      'type': 'symbol',
-      'source': 'drone',
-      'layout': {
-        'icon-image': 'rocket_15'
-      }
-    }) 
-    render(update)
+    $.render(update)
   }
 
-  async function pollDrone(url) {
-    const drone = await fetch(url)
-      .then(data => data.json())
-      .catch(console.error)
+  async function jump() {
+    const count = $.read().count + 1
 
-    set({ drone })
+    $.write({
+      center: coordinates[mod(count, coordinates.length)],
+      count
+    })
   }
 
-  function update({ map }) {
-    if(!!map.getSource) {
-      const { drone } = get()
+  function update(target) {
+    if(!!target.map.getSource) {
+      const { center } = $.read()
 
-      map.getSource('drone').setData(drone)
-      map.flyTo({
-        center: drone.geometry.coordinates,
+      target.map.flyTo({
+        center,
         speed: .5
       })
     }
   }
 
-  css(`
+  $.style(`
     body { margin: 0; padding: 0; }
 
     & .map {
      position: absolute; top: 0; bottom: 0; width: 100%;
     }
   `)
+
+  function mod(n, m) {
+    return ((n % m) + m) % m;
+  }
+
 </script>

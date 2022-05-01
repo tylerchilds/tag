@@ -1,5 +1,5 @@
-import tag from '../tag.bundle.js'
-const highlighter = tag('highlighter')
+import tag from '../../mod.js'
+const $ = tag('highlighter')
 
 const defaultColor = 'yellow'
 
@@ -7,7 +7,7 @@ export default function highlight(string, color = defaultColor) {
   return `<highlighter color="${color}">${string}</highlighter>`
 }
 
-highlighter.html((target) => {
+$.render((target) => {
   const color = target.getAttribute('color') || defaultColor
 
   if(!target.css) {
@@ -22,14 +22,14 @@ highlighter.html((target) => {
         transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
       }
     `
-    highlighter.css(target.css)
+    $.style(target.css)
     target.html = `<span>${target.innerHTML}</span>`
   }
 
   return target.html
 })
 
-highlighter.css(`
+$.style(`
   & {
     display: inline-block;
     position: relative;

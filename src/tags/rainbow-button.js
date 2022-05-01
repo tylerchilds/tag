@@ -1,7 +1,7 @@
-import tag from '../tag.bundle.js'
-const { css } = tag('rainbow-button')
+import tag from '../../mod.js'
+const $ = tag('rainbow-button')
 
-css(`
+$.style(`
   @keyframes rainbow-background {
     0% {
       background: orange;

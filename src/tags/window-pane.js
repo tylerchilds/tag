@@ -1,4 +1,4 @@
-import tag from '../tag.js'
+import tag from '../../mod.js'
 
 // initialize the 7.css stylesheet
 const windows7 = document.createElement('link')
@@ -7,7 +7,7 @@ windows7.href = 'https://unpkg.com/7.css'
 document.head.appendChild(windows7)
 
 // Locally Scoped Tag Commands
-const { html, get, on, set, css } = tag('window-pane', { z: 1 })
+const $ = tag('window-pane', { z: 1 })
 
 // Public Interface
 export default function createWindowPane(id, title, content) {
@@ -23,7 +23,7 @@ export default function createWindowPane(id, title, content) {
 
 // Return a pane based on an id
 const paneById = (id) => {
-  return get()[id] || {
+  return $.read()[id] || {
     id,
     content: '',
     grabbed: false,
@@ -48,7 +48,7 @@ const update = (target, payload) => {
 }
 
 // render html on state change
-html(target => {
+$.render(target => {
   if(!target.renderable) load(target)
 
   const { title, content, grabbed, maximized, x, y, z } = paneByTarget(target)
@@ -82,10 +82,10 @@ html(target => {
 })
 
 // bind actions for title bar controls
-on('click', '[aria-label="Minimize"]', minimize)
-on('click', '[aria-label="Maximize"]', maximize)
-on('click', '[aria-label="Restore"]', restore)
-on('click', '[aria-label="Close"]', close)
+$.on('click', '[aria-label="Minimize"]', minimize)
+$.on('click', '[aria-label="Maximize"]', maximize)
+$.on('click', '[aria-label="Restore"]', restore)
+$.on('click', '[aria-label="Close"]', close)
 
 // minimize a pane
 function minimize({ target }) {
@@ -108,18 +108,18 @@ function close({ target }) {
 }
 
 // bind actions for title bar movement
-on('mousedown', '.title-bar', grab)
-on('mousemove', '.title-bar', drag)
-on('mouseup', '.title-bar', ungrab)
-on('mouseout', '.title-bar', ungrab)
+$.on('mousedown', '.title-bar', grab)
+$.on('mousemove', '.title-bar', drag)
+$.on('mouseup', '.title-bar', ungrab)
+$.on('mouseout', '.title-bar', ungrab)
 
 // grab a pane
 function grab({ target }) {
-  const { z } = get()
+  const { z } = $.read()
   const newZ = z + 1
 
   update(target, { grabbed: true, z: newZ })
-  set({ z: newZ })
+  $.write({ z: newZ })
 }
 
 // drag a pane
@@ -141,7 +141,7 @@ function ungrab({ target }) {
 }
 
 // establish scoped css overrides
-css(`
+$.style(`
   & .window {
     transition: width 250ms ease-in-out;
     transform: translate(var(--x), var(--y));
@@ -187,7 +187,7 @@ async function load(target) {
 
 // manage nested state merge for surgically updating a single pane
 function setState(pane, payload) {
-  set(payload, function merge(state) {
+  $.write(payload, function merge(state) {
     return {
       ...state,
       [pane.id]: {

@@ -19,9 +19,9 @@
 <hello-launcher></hello-launcher>
 
 <script type="module">
-  import tag from 'https://thelanding.page/tag/tag.js'
+  import tag from '../../mod.js'
 
-  const { html, css, set, get, on } = tag('hello-launcher')
+  const $ = tag('hello-launcher')
 
   const modes = {
     welcome: 'welcome',
@@ -42,16 +42,16 @@
   const strictModes = [modes.welcome, modes.alias, modes.home]
   const paginationActions = [actions.back, actions.next]
 
-  on('click', '.next', action(actions.next))
-  on('click', '.back', action(actions.back))
+  $.on('click', '.next', action(actions.next))
+  $.on('click', '.back', action(actions.back))
 
-  on('click', '.welcome', goTo(modes.welcome))
-  on('click', '.home', goTo(modes.home))
-  on('click', '.store', goTo(modes.store))
-  on('click', '.download', goTo(modes.download))
-  on('click', '.settings', goTo(modes.settings))
+  $.on('click', '.welcome', goTo(modes.welcome))
+  $.on('click', '.home', goTo(modes.home))
+  $.on('click', '.store', goTo(modes.store))
+  $.on('click', '.download', goTo(modes.download))
+  $.on('click', '.settings', goTo(modes.settings))
 
-  html(target => {
+  $.render(target => {
     const { id } = target
 
     const launcher = launcherById(id)
@@ -160,13 +160,14 @@
 
     const currentMode = nextMode ? nextMode : mode
     const previousMode = mode !== backMode ? backMode : mode
-    set({ mode: currentMode, backMode: previousMode }, merge(id))
+    $.write({ mode: currentMode, backMode: previousMode }, merge(id))
     target.scrollTop = '0'
     document.activeElement.blur()
   }
-  on('animationend', 'transition', transition)
 
-  css(`
+  $.on('animationend', 'transition', transition)
+
+  $.style(`
     & {
       background: white;
       display: block;
@@ -329,7 +330,7 @@
     }
   `)
 
-  css(`
+  $.style(`
     /* global styles */
     .card {
       background: white;
@@ -368,7 +369,7 @@
     const { action } = message
 
     function setMode(nextMode) {
-      set({ nextMode }, merge(id))
+      $.write({ nextMode }, merge(id))
     }
 
     if(action === actions.goto) {
@@ -405,7 +406,7 @@
   }
 
   export function launcherById(id) {
-    return get()[id] || emptyLauncher
+    return $.read()[id] || emptyLauncher
   }
 
   function merge(id) {
