@@ -50,7 +50,6 @@ $.ready(async () => {
 async function restoreSession() {
   try {
     await solidClientAuthentication.handleIncomingRedirect({ restorePreviousSession: true });
-
     const session = solidClientAuthentication.getDefaultSession();
 
     if (!session.info.isLoggedIn)
@@ -129,5 +128,4 @@ async function performLogout() {
   await solidClientAuthentication.logout();
 }
 
-
-
+export default $
