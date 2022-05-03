@@ -8,7 +8,7 @@ export default function deleteItem($, item) {
       ...state,
       items: [
         ...state.items.filter((item) => {
-          if(item.id !== payload.id) {
+          if(item.url !== payload.url) {
             return item
           }
         })

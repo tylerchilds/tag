@@ -1,5 +1,4 @@
 import ion from './src/vendor/ion/app.js'
-export { default as web } from './src/web.js'
 
 let virtualDOM
 let equal = (a, b) => a === b

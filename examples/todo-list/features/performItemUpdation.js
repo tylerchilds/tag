@@ -1,20 +1,18 @@
-import { web } from '../../../mod.js'
+import { web } from '../../../src/tags/solid-user.js'
 
-export default async function performItemUpdation($, flags) {
-  const itemsContainerUrl = $.read()
-
-  const documentUrl = web.getDocumentUrl(itemsContainerUrl);
+export default async function performItemUpdation(_$, item) {
+  const documentUrl = web.getDocumentUrl(item.url);
 
   await web.updateDocument(documentUrl, `
     DELETE DATA {
       <#it>
         <https://schema.org/actionStatus>
-        <https://schema.org/${flags.done ? 'PotentialActionStatus' : 'CompletedActionStatus'}> .
+        <https://schema.org/${item.completed ? 'PotentialActionStatus' : 'CompletedActionStatus'}> .
     } ;
     INSERT DATA {
       <#it>
         <https://schema.org/actionStatus>
-        <https://schema.org/${flags.done ? 'CompletedActionStatus' : 'PotentialActionStatus'}> .
+        <https://schema.org/${item.completed ? 'CompletedActionStatus' : 'PotentialActionStatus'}> .
     }
   `);
 }

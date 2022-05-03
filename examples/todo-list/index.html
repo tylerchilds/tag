@@ -19,8 +19,8 @@
 		</footer>
     <script type="module">
       // tag is a tiny library for binding HTML fragments to JavaScript closures
-      import tag, { web } from '../../mod.js'
-      import $user from '../../src/tags/solid-user.js'
+      import tag from '../../mod.js'
+      import $user, { web } from '../../src/tags/solid-user.js'
 
       import initialTodoList from './data/initialTodoList.js'
       import flags from './data/flags.js'
@@ -110,7 +110,7 @@
             </footer>
           </section>
         `
-      }, [$user.read()])
+      })
 
       interactives.forEach(async (url) => {
         const { default: start } = await import(url)  

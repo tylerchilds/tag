@@ -8,7 +8,7 @@ export default function updateItem($, item) {
       ...state,
       items: [
         ...state.items.map((item) => {
-          if(item.id !== payload.id) {
+          if(item.url !== payload.url) {
             return item
           }
 
@@ -24,5 +24,5 @@ export default function updateItem($, item) {
   // update the item in the item state
   $.write(item, handler)
 
-  performItemUpdation($, { ...item, done: !task.done })
+  performItemUpdation($, item)
 }

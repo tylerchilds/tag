@@ -1,4 +1,4 @@
-import { web } from '../../../mod.js'
+import { web } from '../../../src/tags/solid-user.js'
 
 export default async function performItemsRequest($) {
   const { itemsContainerUrl } = $.read()
@@ -27,7 +27,7 @@ export default async function performItemsRequest($) {
     items.push({
       url: taskUrl,
       description: descriptionQuad?.object.value || '-',
-      done: statusQuad?.object.value === 'https://schema.org/CompletedActionStatus',
+      completed: statusQuad?.object.value === 'https://schema.org/CompletedActionStatus',
     });
   }
 

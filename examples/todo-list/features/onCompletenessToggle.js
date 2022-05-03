@@ -1,3 +1,5 @@
+import updateItem from './updateItem.js'
+
 // adds a click event listener for when the complete all action is performed
 // all items will be marked as completed in the items state
 export default function onCompletenessToggle($) {
@@ -16,5 +18,5 @@ function handler($, event) {
     completed: checked
   }))
 
-  $.write({ items: markedItems })
+  markedItems.map(item => updateItem($, item))
 }

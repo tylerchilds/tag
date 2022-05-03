@@ -1,6 +1,7 @@
-import { web } from '../../../mod.js'
+import { web } from '../../../src/tags/solid-user.js'
 
 export default async function performItemCreation($, flags) {
+  const { description } = flags
   const { itemsContainerUrl } = $.read();
   // Data discovery mechanisms are still being defined in Solid, but so far it is clear that
   // applications should not hard-code the url of their containers like we are doing in this
@@ -20,9 +21,9 @@ export default async function performItemCreation($, flags) {
     <#it>
       a schema:Action ;
       schema:actionStatus schema:PotentialActionStatus ;
-      schema:description "${web.escapeText(flags.description)}" .
+      schema:description "${web.escapeText(description)}" .
   `);
 
-  return { url: `${documentUrl}#it`, completed: false };
+  return { url: `${documentUrl}#it`, completed: false, description };
 }
 

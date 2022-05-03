@@ -5,8 +5,8 @@ import updateItem from './updateItem.js'
 export default function onItemToggle($) {
   function toggleItemHandler($, event) {
     // get the id of the toggled task and locate the corresponding item in state
-    const id = event.target.dataset.toggleId
-    const item = findItemById($, id)
+    const url = event.target.dataset.toggleId
+    const item = findItemById($, url)
 
     // calls a helper function to update the items state for this updated item
     updateItem($, {
