@@ -1,6 +1,6 @@
 # Tag
 
-Streamlined reactive, declarative web programming
+A tiny functionally declarative reactive web programming kernel
 
 ## Examples
 
