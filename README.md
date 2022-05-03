@@ -4,7 +4,7 @@ A tiny functionally declarative reactive web programming kernel
 
 ## Examples
 
-View examples/index.html for documentation and real world examples.
+View [examples/index.html](./examples/index.html) for documentation and real world examples.
 
 ## Contributing
 
