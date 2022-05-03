@@ -139,7 +139,7 @@
     Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets to be the content to 'Hello World!'
     </p>
     <pre><xmp>import tag from 'https://deno.land/x/tag'
-tag('hello-world').html(() => 'Hello World!')</xmp></pre>
+tag('hello-world').render(() => 'Hello World!')</xmp></pre>
 
     <p><em>
       <strong>Tip!</strong> View the source of the example page to see &lt;hello-world&gt; in action!
@@ -212,12 +212,12 @@ tag('hello-world').html(() => 'Hello World!')</xmp></pre>
 <script type="module">
   import tag from 'https://deno.land/x/tag'
 
-  const { html, get } = tag('hello-name', {
+  const $ = tag('hello-name', {
     'name': 'Earth'
   })
 
-  html(() => {
-    const { name } = get()
+  render(() => {
+    const { name } = read()
 
     return `Hello ${name}`
   })
