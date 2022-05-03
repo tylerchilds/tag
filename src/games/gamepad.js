@@ -1,4 +1,4 @@
-import tag from 'https://thelanding.page/tag/tag.bundle.js'
+import tag from '../../mod.js'
 const controllers = {};
 
 const initialState = {}
