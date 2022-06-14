@@ -12,6 +12,10 @@ const $ = tag('solid-user', {
   user: null,
 })
 
+restoreSession().then(user => {
+  $.write({ user, loading: false });
+})
+
 $.render(() => {
   const { user, loading } = $.read()
 
@@ -39,12 +43,6 @@ $.on('click', '#login-button', () => {
 
 $.on('click', '#logout-button', async () => {
   await performLogout();
-})
-
-$.ready(async () => {
-  $.write({ loading: true });
-  const user = await restoreSession();
-  $.write({ user, loading: false });
 })
 
 async function restoreSession() {

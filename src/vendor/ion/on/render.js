@@ -4,10 +4,10 @@
   Copyright Dates:
     2021-19-03 Netflix, Inc. (https://netflix.com)
     2022-15-01 Tyler Childs
+    2022-13-06 Tyler Childs
  */
 import uuidv4 from '../../uuidv4.js';
 const renderEvent = new Event('render');
-const mountEvent = new Event('mount');
 
 let selectors = []
 
@@ -40,11 +40,7 @@ function getSubscribers(node) {
 
 function dispatchRender(subscribers) {
   subscribers.map(s => {
-    if(!s.mounted) {
-      s.mounted = true
-      if(!s.id) s.id = uuidv4()
-      s.dispatchEvent(mountEvent)
-    }
+    if(!s.id) s.id = uuidv4()
     s.dispatchEvent(renderEvent)
   });
 }

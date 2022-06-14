@@ -49,21 +49,17 @@
       // create a new tag: <todo-list>
       // define the initial state and shape of the data
       const $ = tag('todo-list', initialTodoList)
-      $.write({ loading: true });
-      $.mount(main)
 
-      async function main() {
-        $.write({ loading: true });
+
+      new Promise((resolve) => {
+        (function check(has) {
+          if(has().user) {
+            resolve(has().user) 
+          }
+          requestAnimationFrame(() => check(has))
+        })($user.read)
+      }).then(async (user) => {
         const { itemsContainerUrl } = $.read();
-
-        const user = await new Promise((resolve) => {
-          (function check(has) {
-            if(has().user) {
-              resolve(has().user) 
-            }
-            requestAnimationFrame(() => check(has))
-          })($user.read)
-        })
 
         if(!itemsContainerUrl) {
           const url = await web.createContainer(
@@ -75,7 +71,7 @@
 
         const items = await performItemsRequest($);
         $.write({ items, loading: false });
-      }
+      })
 
       // html is a render function; if a string is returned, it is rendered
       // whenever state changes, the render function will be called on each target

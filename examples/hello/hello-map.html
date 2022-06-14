@@ -18,7 +18,7 @@
 
   const $ = tag('hello-map', { center: coordinates[1], count: 0 })
 
-  $.mount(initialize)
+  $.render(draw)
 
   function initialize(target) {
     const { center } = $.read()
@@ -34,13 +34,11 @@
       zoom: 8
     })
 
-    target.map.on('load', () => load(target.map))
+    target.map.on('load', () => start(target.map))
   }
 
-  function load(map) {
+  function start(map) {
     setInterval(() => jump(), 5000)
-
-    $.render(update)
   }
 
   async function jump() {
@@ -52,7 +50,9 @@
     })
   }
 
-  function update(target) {
+  function draw(target) {
+    if(!target.map) initialize(target)
+
     if(!!target.map.getSource) {
       const { center } = $.read()
 
@@ -66,6 +66,10 @@
   $.style(`
     body { margin: 0; padding: 0; }
 
+    & {
+      display: block;
+    }
+
     & .map {
      position: absolute; top: 0; bottom: 0; width: 100%;
     }
@@ -74,5 +78,4 @@
   function mod(n, m) {
     return ((n % m) + m) % m;
   }
-
 </script>

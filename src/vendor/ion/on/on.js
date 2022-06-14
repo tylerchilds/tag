@@ -9,7 +9,7 @@
 import { observe, disregard } from './render.js?CACHEBUST';
 import listen from './listen.js?CACHEBUST';
 
-const observableEvents = ['render', 'mount']
+const observableEvents = ['render']
 
 export default function on(type, selector, handler) {
   const unbind = listen(type, selector, handler, this);

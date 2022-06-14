@@ -8,7 +8,9 @@ const initialState = {
   activeChords: [],
   activeNotes: [],
   activeOctaves: [],
-  activeStrums: []
+  activeStrums: [],
+  frames: {},
+  ready: false
 }
 
 const $ = tag('guitar-hero', initialState)
@@ -87,10 +89,6 @@ const shades = {
   [1]: [6, 2],
   [-1]: [1, 5],
 }
-
-$.ready(() => {
-  $.write({ frames: {}, ready: false })
-})
 
 function ready() {
   return new Promise((ready) => {

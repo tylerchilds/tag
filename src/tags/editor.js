@@ -34,32 +34,30 @@ const config = {
 }
 
 function mount($, flags) {
-  $.mount(target => {
-    $.ready(() => {
-      // not ready or already initialized, quit
-      if(editors[target.id]) return
+  $.render(target => {
+    // not ready or already initialized, quit
+    if(editors[target.id]) return
 
-      const initialState = $.read()
-      const copy = initialState[target.id] || {}
+    const initialState = $.read()
+    const copy = initialState[target.id] || {}
 
-      const state = EditorState.create({
-        ...config,
-        ...flags,
-        doc: copy.value
-      })
-
-      const view = new EditorView({
-				dispatch: persist(target, $, flags),
-        parent: target,
-        state
-      }) 
-
-      editors[target.id] = {
-        $,
-        state,
-        view,
-      }
+    const state = EditorState.create({
+      ...config,
+      ...flags,
+      doc: copy.value
     })
+
+    const view = new EditorView({
+      dispatch: persist(target, $, flags),
+      parent: target,
+      state
+    }) 
+
+    editors[target.id] = {
+      $,
+      state,
+      view,
+    }
   })
 }
 

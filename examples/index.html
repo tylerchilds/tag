@@ -183,10 +183,6 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
         <dd>
         Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
         </dd>
-        <dt><code>ready(function()) : void</code></dt>
-        <dd>
-        The provided callback will be invoked when the tag is ready: once data has been restored from the database.
-        </dd>
       </dl>
     </details>
 
@@ -359,12 +355,6 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
         document.querySelector(accordion.selector)
           .setAttribute('open', 'true')
       }
-
-      accordion.ready(() => {
-        const { open } = accordion.read()
-
-        if(open) openAccordion()
-      })
     </script>
     <script src="../src/tags/highlighter.js" type="module"></script>
     <script src="../src/tags/rainbow-button.js" type="module"></script>

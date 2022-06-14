@@ -1,5 +1,3 @@
-function Ready(callback: () => null) : null
-function Mount(target: HTMLElement) : null
 function Reader() : Record<string, unknown>
 function MergeHandler(state: Record<string, unknown>, payload: Record<string, unknown>) : null
 function Render(target: HTMLElement) : string | null
@@ -9,9 +7,7 @@ function EventDelegator(type: string, selector: string, EventHandler)
 function Writer(payload: Record<string, unknown>, MergeHandler) : null
 
 interface Tag {
-  ready: Ready;
   selector: string;
-  mount: Mount;
   read: Reader;
   render: Render;
   style: Styler;

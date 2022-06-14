@@ -1,26 +1,10 @@
 import ion from './src/vendor/ion/app.js'
-
-let virtualDOM
-let equal = (a, b) => a === b
+import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
+import { deepEqual } from 'https://esm.sh/fast-equals@2.0.4?bundle'
 
 const cleanStates = {}
 
-const dom = (target, html) => {
-  if(virtualDOM) {
-    virtualDOM(target, html)
-  } else {
-    target.innerHTML = html
-  }
-}
-
-function mount(selector, callback) {
-  ion.on('mount', selector, (event) => {
-    console.log(event.target.id)
-    callback(event.target)
-  })
-}
-
-async function render(selector, callback, dependencies = []) {
+function render(selector, callback, dependencies = []) {
   ion.on('render', selector, (event) => {
     const id = [...event.target.attributes]
       .reduce((data, x) => {
@@ -29,16 +13,9 @@ async function render(selector, callback, dependencies = []) {
 
     if(clean(id, selector, dependencies)) return
 
-    const { loaded } = read(selector)
-
-    if(!loaded) return;
-
     const html = callback(event.target)
-    if(html) dom(event.target, html)
+    if(html) innerHTML(event.target, html)
   })
-
-  const { innerHTML } = await import('https://esm.sh/diffhtml?bundle')
-  virtualDOM = innerHTML
 }
 
 function style(selector, stylesheet) {
@@ -65,15 +42,6 @@ function on(selector1, eventName, selector2, callback) {
   ion.on(eventName, `${selector1} ${selector2}`, callback)
 }
 
-function restore(selector, initialState) {
-  const promise = ion.restore(selector)
-  promise.then(state => {
-    write(selector, { ...initialState, ...state, loaded: true })
-  })
-  write(selector, initialState)
-  return promise
-}
-
 function clean(id, selector, ...more) {
   const selectors = [selector, ...more]
   const cacheIndex = `${id}${new Error().stack}`
@@ -85,7 +53,7 @@ function clean(id, selector, ...more) {
   return selectors.every(x => {
     const previous = cache[x]
     const current = ion.get(x)
-    const same = equal(previous, current)
+    const same = deepEqual(previous, current)
 
     cleanStates[cacheIndex][x] = current
     return same
@@ -93,22 +61,10 @@ function clean(id, selector, ...more) {
 }
 
 export default function tag(selector, initialState = {}) {
-  let thisTagReady = false
-
-  function ready(hook) {
-    if(!thisTagReady) {
-      requestAnimationFrame(() => ready(hook))
-			return
-    }
-    hook()
-  }
-
-  restore(selector, initialState).then(() => thisTagReady = true)
+  write(selector, initialState)
 
   return {
-    ready,
     selector,
-    mount: mount.bind(null, selector),
     read: read.bind(null, selector),
     render: render.bind(null, selector),
     style: style.bind(null, selector),
@@ -117,5 +73,3 @@ export default function tag(selector, initialState = {}) {
   }
 }
 
-import('https://esm.sh/fast-equals@2.0.4?bundle')
-  .then(({ deepEqual }) => equal = deepEqual)

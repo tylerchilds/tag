@@ -24,6 +24,8 @@
     const { id } = target
     const { images, position } = galleryById(id)
 
+    if(images.length <= 0) return
+
     const gallery = images.map((img, i) => `
       <figure class="${i === position ? 'active' : ''}">
         <img src="${img.src}" alt="${img.alt}" />
