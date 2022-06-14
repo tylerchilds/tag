@@ -136,7 +136,7 @@
 
     <h2>Quick Start <a href="./hello/hello-world.html">View Example</a></h2>
     <p>
-    Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets to be the content to 'Hello World!'
+    Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets the content to 'Hello World!'
     </p>
     <pre><xmp>import tag from 'https://deno.land/x/tag'
 tag('hello-world').render(() => 'Hello World!')</xmp></pre>
@@ -148,7 +148,7 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     <h2>Documentation</h2>
     <p>
     <code>
-      <strong>tag(selector: string [, state: object]) : object</strong>
+      <strong>const $ = tag(selector: string [, state: object]) : object</strong>
     </code>
     <p>
     Creates an custom, scoped HTML tag. Requires a selector: a CSS selector. An optional second argument may be passed for seeding the initial state.
@@ -163,32 +163,29 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
       </summary>
       <br/>
       <dl>
-        <dt><code>render(function(target: EventTarget))</code></dt>
+        <dt><code>$.render(function(target: EventTarget))</code></dt>
         <dd>
         Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
         </dd>
-        <dt><code>style(stylesheet: string)</code></dt>
+        <dt><code>$.style(stylesheet: string)</code></dt>
         <dd>
         Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
         </dd>
-        <dt><code>on(eventType, selector, function(event)) : function</code></dt>
+        <dt><code>$.on(eventType: string, selector: string, function(event)) : function</code></dt>
         <dd>
         An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
         </dd>
-        <dt><code>read() : object</code></dt>
+        <dt><code>$.read() : object</code></dt>
         <dd>
         Returns the current state.
         </dd>
-        <dt><code>write(payload [, function(state, payload)])</code></dt>
+        <dt><code>$.write(payload [, function(state, payload)])</code></dt>
         <dd>
         Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
         </dd>
       </dl>
     </details>
 
-    <p>
-    <strong>Dependencies:</strong> There is one third-party dependency, <a href="https://diffhtml.org/">diffHTML</a>.
-    </p>
     <p>
     <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
     </p>
@@ -212,7 +209,7 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     'name': 'Earth'
   })
 
-  render(() => {
+  $.render(() => {
     const { name } = read()
 
     return `Hello ${name}`
@@ -318,10 +315,6 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     </p>
 
     <p>
-    Currently, he's employed by <a href="https://www.netflix.com">Netflix</a>.
-    </p>
-
-    <p>
     You can reach him via email at <a href="mailto:yooo@tychi.me">yooo@tychi.me</a> for any reason at any time. Response times may vary.
     </p>
     <p><strong>Fun fact!</strong> <a href="https://thelanding.page/tag">Tag</a> is the final part in a now-complete solo trilogy. <a href="https://www.tylerchilds.com/projects/vanilla-html/">Vanilla HTML</a> was a flop in 2013 and <a href="https://www.cutestrap.com/">Cutestrap</a> was a cult-hit in 2016!
@@ -334,7 +327,7 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
 
     <footer>
       <center style="font-style: italic; color: grey;">
-        Established: 2021. Last updated: 2022/05/01 (YYYY/MM/DD)
+        Established: 2021. Last updated: 2022/06/13 (YYYY/MM/DD)
       </center>
     </footer>
 
