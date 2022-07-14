@@ -1,4 +1,5 @@
 import tag from '../../mod.js'
+import './rainbow-button.js'
 
 import solidClientAuthentication from 'https://esm.sh/@inrupt/solid-client-authn-browser@1.11.2?bundle'
 import SolidFileClient from 'https://esm.sh/solid-file-client@1.2.5?bundle'
@@ -21,7 +22,7 @@ $.render(() => {
 
   if(loading) return `Loading...`
 
-  return user
+  const button = user
     ? `
       <button id="logout-button" type="button">Log out</button>
     `
@@ -30,6 +31,12 @@ $.render(() => {
         Log in with Solid
       </button>
     `
+
+  return `
+    <rainbow-button>
+      ${button}
+    </rainbow-button>
+  `
 })
 
 $.on('click', '#login-button', () => {
