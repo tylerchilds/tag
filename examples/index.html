@@ -156,35 +156,28 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     <p>
     It will return an object with the selector as an attribute and the following namespaced functions.
     </p>
-    </p>
-    <details>
-      <summary class="rainbow-button">
-        Toggle Visibility of returned object properties.
-      </summary>
-      <br/>
-      <dl>
-        <dt><code>$.render(function(target: EventTarget))</code></dt>
-        <dd>
-        Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
-        </dd>
-        <dt><code>$.style(stylesheet: string)</code></dt>
-        <dd>
-        Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
-        </dd>
-        <dt><code>$.on(eventType: string, selector: string, function(event)) : function</code></dt>
-        <dd>
-        An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
-        </dd>
-        <dt><code>$.read() : object</code></dt>
-        <dd>
-        Returns the current state.
-        </dd>
-        <dt><code>$.write(payload [, function(state, payload)])</code></dt>
-        <dd>
-        Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
-        </dd>
-      </dl>
-    </details>
+    <dl>
+      <dt><code>$.render(function(target: EventTarget))</code></dt>
+      <dd>
+      Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
+      </dd>
+      <dt><code>$.style(stylesheet: string)</code></dt>
+      <dd>
+      Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
+      </dd>
+      <dt><code>$.on(eventType: string, selector: string, function(event)) : function</code></dt>
+      <dd>
+      An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
+      </dd>
+      <dt><code>$.read() : object</code></dt>
+      <dd>
+      Returns the current state.
+      </dd>
+      <dt><code>$.write(payload [, function(state, payload)])</code></dt>
+      <dd>
+      Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
+      </dd>
+    </dl>
 
     <p>
     <strong>Browser Support:</strong> The tail feature set for this application is ES Modules, which is supported by all modern browsers. For an entertaining summary, please refer to <a href="https://www.youtube.com/watch?v=dAIckpwW9ds">Making Future Interfaces: ES Modules</a>.
