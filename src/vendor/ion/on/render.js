@@ -8,11 +8,13 @@
  */
 import uuidv4 from '../../uuidv4.js';
 const renderEvent = new Event('render');
+const createEvent = new Event('create');
 
 let selectors = []
 
 export function observe(selector) {
   selectors = [...new Set([...selectors, selector])];
+  maybeCreate(selector)
   render();
 }
 
@@ -31,6 +33,12 @@ export default function render(_state) {
   dispatchRender(subscribers);
 }
 
+function maybeCreate(selector) {
+  [...document.querySelectorAll(selector)]
+    .filter(x => !x.reactive)
+    .forEach(dispatchCreate)
+}
+
 function getSubscribers(node) {
   if(selectors.length > 0)
     return [...node.querySelectorAll(selectors.join(', '))];
@@ -45,11 +53,21 @@ function dispatchRender(subscribers) {
   });
 }
 
+function dispatchCreate(target) {
+  target.dispatchEvent(createEvent)
+  target.reactive = true
+}
+
 const config = { childList: true, subtree: true };
 
 function mutationObserverCallback(mutationsList, observer) {
   const subscriberCollections = [...mutationsList]
     .map(m =>	getSubscribers(m.target));
+
+  subscriberCollections
+    .flatMap(x =>x)
+    .filter(x => !x.reactive)
+    .forEach(dispatchCreate)
 
   subscriberCollections.forEach(dispatchRender);
 };

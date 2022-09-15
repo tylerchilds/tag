@@ -1,0 +1,37 @@
+
+<!-- hello-chat.html -->
+<hello-chat></hello-chat>
+
+<script src="https://unpkg.com/statebus@7.0.11/statebus.js"></script>
+<script src="https://unpkg.com/statebus@7.0.11/client-library.js"></script>
+<script src="https://unpkg.com/braidify/braidify-client.js"></script>
+<script type="module">
+  import tag from '../../mod.js'
+  const $ = tag('hello-chat')
+
+  $.render(() => {
+    console.log('yeeee')
+    const messages = window.bus.state['http://invisible.college:3007/messages'] || []
+
+    const log = messages.map(({ from, body }) => `<div>${from}: ${body}</div>`).join('')
+    
+    return `
+      ${log}
+      <form>
+        <input name="message" />
+        <button type="submit">Send</button>
+      </form>
+    `
+  })
+
+  $.on('submit', 'form', (event) => {
+    event.preventDefault()
+    const { value } = event.target.message
+
+    window.bus.state['http://invisible.college:3007/messages'].push({
+      from: 'tyler',
+      body: value
+    })
+  })
+
+</script>

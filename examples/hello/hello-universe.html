@@ -35,6 +35,8 @@
     Application is loading...
   </hello-universe>
 
+
+  <script src="https://unpkg.com/statebus@7/statebus.js"></script>
   <script type="module">
     import tag from '../../mod.js'
 
@@ -96,8 +98,12 @@
 
     $.render(() => {
       // pluck our current values from our current state
-      const { planets, tick, showAdmin } = $.read()
+      const { tick, showAdmin } = $.read()
 
+      const planets = window.bus.state.planets
+      console.log('rerender')
+
+      if(!planets) return
       // get the current planet by modulo of current tick by # of planets
       const current = planets[tick % planets.length]
 

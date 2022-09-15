@@ -4,21 +4,22 @@ import { deepEqual } from 'https://esm.sh/fast-equals@2.0.4?bundle'
 
 const cleanStates = {}
 
-function render(selector, callback, dependencies = []) {
+export function render(selector, renderer, dependencies = []) {
+  let funk = () => null
+
+  ion.on('create', selector, (event) => {
+    funk = bus.reactive((event) => {
+      const html = renderer(event.target)
+      if(html) innerHTML(event.target, html)
+    })
+  })
+
   ion.on('render', selector, (event) => {
-    const id = [...event.target.attributes]
-      .reduce((data, x) => {
-        return `${data}${x.name}${x.value}`
-      }, '')
-
-    if(clean(id, selector, dependencies)) return
-
-    const html = callback(event.target)
-    if(html) innerHTML(event.target, html)
+    funk(event)
   })
 }
 
-function style(selector, stylesheet) {
+export function style(selector, stylesheet) {
   const styles = `
     <style type="text/css" data-tag=${selector}>
       ${stylesheet.replaceAll('&', selector)}
@@ -30,15 +31,15 @@ function style(selector, stylesheet) {
       .insertAdjacentHTML("beforeend", styles)
 }
 
-function read(selector) {
+export function read(selector) {
   return ion.get(selector) || {}
 }
 
-function write(selector, payload, middleware) {
+export function write(selector, payload, middleware) {
   ion.set(selector, payload, middleware)
 }
 
-function on(selector1, eventName, selector2, callback) {
+export function on(selector1, eventName, selector2, callback) {
   ion.on(eventName, `${selector1} ${selector2}`, callback)
 }
 
