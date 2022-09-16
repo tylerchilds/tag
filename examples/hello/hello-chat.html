@@ -2,19 +2,16 @@
 <!-- hello-chat.html -->
 <hello-chat></hello-chat>
 
-<script src="https://unpkg.com/statebus@7.0.11/statebus.js"></script>
-<script src="https://unpkg.com/statebus@7.0.11/client-library.js"></script>
-<script src="https://unpkg.com/braidify/braidify-client.js"></script>
 <script type="module">
-  import tag from '../../mod.js'
+  import tag, { state } from '../../mod.js'
   const $ = tag('hello-chat')
+  state['http://invisible.college:3007/messages'] = []
 
   $.render(() => {
-    console.log('yeeee')
-    const messages = window.bus.state['http://invisible.college:3007/messages'] || []
+    const messages = state['http://invisible.college:3007/messages'] || []
 
     const log = messages.map(({ from, body }) => `<div>${from}: ${body}</div>`).join('')
-    
+
     return `
       ${log}
       <form>
@@ -28,7 +25,7 @@
     event.preventDefault()
     const { value } = event.target.message
 
-    window.bus.state['http://invisible.college:3007/messages'].push({
+    state['http://invisible.college:3007/messages'].push({
       from: 'tyler',
       body: value
     })

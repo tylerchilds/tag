@@ -39,6 +39,19 @@
     back: 'back'
   }
 
+  const emptyLauncher = {
+    applications: [],
+    emoji: '🏠',
+    emojiLabel: 'home',
+    mode: 'welcome',
+    nextMode: null,
+    backMode: null
+  }
+
+  export function launcherById(id) {
+    return $.read()[id] || emptyLauncher
+  }
+
   const strictModes = [modes.welcome, modes.alias, modes.home]
   const paginationActions = [actions.back, actions.next]
 
@@ -393,20 +406,6 @@
       setMode(order[nextIndex])
       return
     }
-  }
-
-  /* model-like logic */
-  const emptyLauncher = {
-    applications: [],
-    emoji: '🏠',
-    emojiLabel: 'home',
-    mode: 'welcome',
-    nextMode: null,
-    backMode: null
-  }
-
-  export function launcherById(id) {
-    return $.read()[id] || emptyLauncher
   }
 
   function merge(id) {
