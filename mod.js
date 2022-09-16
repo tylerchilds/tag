@@ -41,8 +41,8 @@ export function read(selector) {
 }
 
 export function write(selector, payload, handler = (s, p) => ({...s,...p})) {
-  const current = state[selector]
-  state[selector] = handler(current || {}, payload);
+  const current = bus.cache[selector] || {}
+  state[selector] = handler(current.val || {}, payload);
 }
 
 function on(selector1, eventName, selector2, callback) {
