@@ -2,8 +2,8 @@ import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
 import bus from 'http://localhost:8042/client-library.js'
 import uuidv4 from './src/vendor/uuidv4.js';
 
-const renderEvent = new Event('render');
-const createEvent = new Event('create');
+const RENDER_EVENT = new Event('render');
+const CREATE_EVENT = new Event('create');
 
 const observableEvents = ['render']
 
@@ -12,8 +12,8 @@ export const state = bus.state
 function render(selector, renderer) {
   let funk = () => null
 
-  listen('create', selector, (event) => {
-    funk = bus.reactive(() => {
+  listen('create', selector, () => {
+    funk = bus.reactive((event) => {
       const html = renderer(event.target)
       if(html) innerHTML(event.target, html)
     })
@@ -65,7 +65,7 @@ export default function tag(selector, initialState = {}) {
 export function listen(type, selector, handler) {
   const callback = (event) => {
     if(event.target && event.target.matches && event.target.matches(selector)) {
-      handler.call(this, event);
+      handler.call(null, event);
     }
   };
 
@@ -89,7 +89,7 @@ let selectors = []
 function observe(selector) {
   selectors = [...new Set([...selectors, selector])];
 
-  maybeCreate([...document.querySelectorAll(selector)])
+  maybeCreateReactive([...document.querySelectorAll(selector)])
   notify();
 }
 
@@ -108,7 +108,7 @@ function notify() {
   dispatchRender(subscribers);
 }
 
-function maybeCreate(targets) {
+function maybeCreateReactive(targets) {
   targets
     .filter(x => !x.reactive)
     .forEach(dispatchCreate)
@@ -124,12 +124,12 @@ function getSubscribers(node) {
 function dispatchRender(subscribers) {
   subscribers.map(s => {
     if(!s.id) s.id = uuidv4()
-    s.dispatchEvent(renderEvent)
+    s.dispatchEvent(RENDER_EVENT)
   });
 }
 
 function dispatchCreate(target) {
-  target.dispatchEvent(createEvent)
+  target.dispatchEvent(CREATE_EVENT)
   target.reactive = true
 }
 
@@ -142,7 +142,7 @@ function mutationObserverCallback(mutationsList, observer) {
   const targets = subscriberCollections
     .flatMap(x =>x)
 
-  maybeCreate(targets)
+  maybeCreateReactive(targets)
 
   subscriberCollections.forEach(dispatchRender);
 };
