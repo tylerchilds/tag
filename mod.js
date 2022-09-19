@@ -1,13 +1,15 @@
+import "http://localhost:8042/statebus.js"
+import "http://localhost:8042/client-library.js"
+import "http://unpkg.com/braidify/braidify-client.js"
+
 import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
-import bus from 'http://localhost:8042/client-library.js'
-import uuidv4 from './src/vendor/uuidv4.js';
 
 const RENDER_EVENT = new Event('render');
 const CREATE_EVENT = new Event('create');
 
 const observableEvents = ['render']
 
-export const state = bus.state
+const state = bus.state
 
 function render(selector, renderer) {
   let funk = () => null
@@ -43,6 +45,10 @@ export function read(selector) {
 export function write(selector, payload, handler = (s, p) => ({...s,...p})) {
   const current = bus.cache[selector] || {}
   state[selector] = handler(current.val || {}, payload);
+}
+
+export function signal(resource) {
+  return state[resource]
 }
 
 function on(selector1, eventName, selector2, callback) {
@@ -122,13 +128,11 @@ function getSubscribers(node) {
 }
 
 function dispatchRender(subscribers) {
-  subscribers.map(s => {
-    if(!s.id) s.id = uuidv4()
-    s.dispatchEvent(RENDER_EVENT)
-  });
+  subscribers.map(x => x.dispatchEvent(RENDER_EVENT));
 }
 
 function dispatchCreate(target) {
+  if(!target.id) target.id = sufficientlyUniqueId()
   target.dispatchEvent(CREATE_EVENT)
   target.reactive = true
 }
@@ -150,3 +154,13 @@ function mutationObserverCallback(mutationsList, observer) {
 const observer = new MutationObserver(mutationObserverCallback);
 
 observer.observe(document.body, config);
+
+function sufficientlyUniqueId() {
+  // https://stackoverflow.com/a/2117523
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+window.braid_fetch = fetch

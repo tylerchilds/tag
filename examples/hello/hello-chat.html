@@ -1,34 +1,51 @@
-
 <!-- hello-chat.html -->
-<hello-chat></hello-chat>
+<hello-chat room="http://invisible.college:3007/messages"></hello-chat>
 
 <script type="module">
-  import tag, { state } from '../../mod.js'
-  const $ = tag('hello-chat')
-  state['http://invisible.college:3007/messages'] = []
+  import tag, { signal } from '../../mod.js'
 
-  $.render(() => {
-    const messages = state['http://invisible.college:3007/messages'] || []
+  const $ = tag('hello-chat', { name: "Default Name" })
+
+  function initialize(target) {
+    if(target.initialized) return
+    $.write({ room: target.getAttribute('room') })
+    target.initialized = true
+  }
+
+  $.render(target => {
+    initialize(target)
+
+    const { name, room } = $.read()
+    const messages = signal(room) || []
 
     const log = messages.map(({ from, body }) => `<div>${from}: ${body}</div>`).join('')
 
     return `
       ${log}
       <form>
+        <input name="name" value="${name}" />
         <input name="message" />
         <button type="submit">Send</button>
       </form>
     `
   })
 
-  $.on('submit', 'form', (event) => {
-    event.preventDefault()
-    const { value } = event.target.message
-
-    state['http://invisible.college:3007/messages'].push({
-      from: 'tyler',
-      body: value
+  $.on('change', '[name="name"]', (event) => {
+    $.write({
+      name: event.target.value
     })
   })
 
+  $.on('submit', 'form', (event) => {
+    event.preventDefault()
+    const { name, room } = $.read()
+    const { value } = event.target.message
+
+    const messages = signal(room) || []
+
+    messages.push({
+      from: name,
+      body: value
+    })
+  })
 </script>

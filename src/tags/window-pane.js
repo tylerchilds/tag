@@ -7,7 +7,7 @@ windows7.href = 'https://unpkg.com/7.css'
 document.head.appendChild(windows7)
 
 // Locally Scoped Tag Commands
-const $ = tag('window-pane', { z: 1 })
+const $ = tag('window-pane')
 
 // Public Interface
 export default function createWindowPane(id, title, content) {
@@ -174,11 +174,13 @@ $.style(`
 // asyncronously load a pane on first render
 async function load(target) {
   target.renderable = true
+  const title = target.getAttribute('title')
+  debugger
 
   const config = await new Promise(resolve => {
     resolve({
       content: target.innerHTML,
-      title: target.getAttribute('title')
+      title
     })
   })
 
