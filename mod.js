@@ -1,14 +1,15 @@
-import "http://localhost:8042/statebus.js"
-import "http://localhost:8042/client-library.js"
-import "http://unpkg.com/braidify/braidify-client.js"
-
+import "./src/vendor/statebus/statebus.js"
+import "./src/vendor/statebus/client-library.js"
+import "./src/vendor/statebus/braidify-client.js"
 import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
+
+// optimally, we'll import just bus from statebus and everything else will be implemented under the hood. stubbing for now to unblock development using tag
+const bus = window.bus
+window.braid_fetch = window.fetch
 
 const CREATE_EVENT = 'create'
 
 const observableEvents = [CREATE_EVENT]
-
-const state = bus.state
 
 function update(target, renderer) {
   const html = renderer(target)
@@ -36,16 +37,16 @@ function style(selector, stylesheet) {
 }
 
 export function read(selector) {
-  return state[selector] || {}
+  return bus.state[selector] || {}
 }
 
 export function write(selector, payload, handler = (s, p) => ({...s,...p})) {
   const current = bus.cache[selector] || {}
-  state[selector] = handler(current.val || {}, payload);
+  bus.state[selector] = handler(current.val || {}, payload);
 }
 
 export function signal(resource) {
-  return state[resource]
+  return bus.state[resource]
 }
 
 export function on(selector1, eventName, selector2, callback) {
@@ -111,9 +112,9 @@ function maybeCreateReactive(targets) {
     .forEach(dispatchCreate)
 }
 
-function getSubscribers(node) {
+function getSubscribers({ target }) {
   if(selectors.length > 0)
-    return [...node.querySelectorAll(selectors.join(', '))];
+    return [...target.querySelectorAll(selectors.join(', '))];
   else
     return []
 }
@@ -124,19 +125,13 @@ function dispatchCreate(target) {
   target.reactive = true
 }
 
-const config = { childList: true, subtree: true };
-
-function mutationObserverCallback(mutationsList, observer) {
+new MutationObserver((mutationsList) => {
   const targets = [...mutationsList]
-    .map(m =>	getSubscribers(m.target))
-    .flatMap(x =>x)
+    .map(getSubscribers)
+    .flatMap(x => x)
 
   maybeCreateReactive(targets)
-};
-
-const observer = new MutationObserver(mutationObserverCallback);
-
-observer.observe(document.body, config);
+}).observe(document.body, { childList: true, subtree: true });
 
 function sufficientlyUniqueId() {
   // https://stackoverflow.com/a/2117523
@@ -145,5 +140,3 @@ function sufficientlyUniqueId() {
     return v.toString(16);
   });
 }
-
-window.braid_fetch = fetch
