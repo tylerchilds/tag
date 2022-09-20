@@ -16,9 +16,12 @@
     initialize(target)
 
     const { name, room } = $.read()
+
     const messages = signal(room) || []
 
-    const log = messages.map(({ from, body }) => `<div>${from}: ${body}</div>`).join('')
+    const log = messages.map(({ from, body }) => `
+      <div>${from}: ${body}</div>
+    `).join('')
 
     return `
       ${log}

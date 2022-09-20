@@ -175,7 +175,6 @@ $.style(`
 async function load(target) {
   target.renderable = true
   const title = target.getAttribute('title')
-  debugger
 
   const config = await new Promise(resolve => {
     resolve({

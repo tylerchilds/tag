@@ -4,25 +4,22 @@ import "http://unpkg.com/braidify/braidify-client.js"
 
 import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
 
-const RENDER_EVENT = new Event('render');
-const CREATE_EVENT = new Event('create');
+const CREATE_EVENT = 'create'
 
-const observableEvents = ['render']
+const observableEvents = [CREATE_EVENT]
 
 const state = bus.state
 
+function update(target, renderer) {
+  const html = renderer(target)
+  if(html) innerHTML(target, html)
+}
+
 function render(selector, renderer) {
-  let funk = () => null
-
-  listen('create', selector, () => {
-    funk = bus.reactive((event) => {
-      const html = renderer(event.target)
-      if(html) innerHTML(event.target, html)
-    })
-  })
-
-  listen('render', selector, (event) => {
-    funk(event)
+  listen(CREATE_EVENT, selector, (event) => {
+    bus.reactive(
+      update.bind(null, event.target, renderer)
+    )()
   })
 }
 
@@ -51,7 +48,7 @@ export function signal(resource) {
   return state[resource]
 }
 
-function on(selector1, eventName, selector2, callback) {
+export function on(selector1, eventName, selector2, callback) {
   listen(eventName, `${selector1} ${selector2}`, callback)
 }
 
@@ -68,7 +65,7 @@ export default function tag(selector, initialState = {}) {
   }
 }
 
-export function listen(type, selector, handler) {
+export function listen(type, selector, handler = () => null) {
   const callback = (event) => {
     if(event.target && event.target.matches && event.target.matches(selector)) {
       handler.call(null, event);
@@ -82,7 +79,7 @@ export function listen(type, selector, handler) {
   }
 
   return function unlisten() {
-    if(type === 'render') {
+    if(type === CREATE_EVENT) {
       disregard(selector);
     }
 
@@ -96,7 +93,6 @@ function observe(selector) {
   selectors = [...new Set([...selectors, selector])];
 
   maybeCreateReactive([...document.querySelectorAll(selector)])
-  notify();
 }
 
 function disregard(selector) {
@@ -107,11 +103,6 @@ function disregard(selector) {
       ...selectors.slice(index + 1)
     ];
   }
-}
-
-function notify() {
-  const subscribers = getSubscribers(document);
-  dispatchRender(subscribers);
 }
 
 function maybeCreateReactive(targets) {
@@ -127,28 +118,20 @@ function getSubscribers(node) {
     return []
 }
 
-function dispatchRender(subscribers) {
-  subscribers.map(x => x.dispatchEvent(RENDER_EVENT));
-}
-
 function dispatchCreate(target) {
   if(!target.id) target.id = sufficientlyUniqueId()
-  target.dispatchEvent(CREATE_EVENT)
+  target.dispatchEvent(new Event(CREATE_EVENT))
   target.reactive = true
 }
 
 const config = { childList: true, subtree: true };
 
 function mutationObserverCallback(mutationsList, observer) {
-  const subscriberCollections = [...mutationsList]
-    .map(m =>	getSubscribers(m.target));
-
-  const targets = subscriberCollections
+  const targets = [...mutationsList]
+    .map(m =>	getSubscribers(m.target))
     .flatMap(x =>x)
 
   maybeCreateReactive(targets)
-
-  subscriberCollections.forEach(dispatchRender);
 };
 
 const observer = new MutationObserver(mutationObserverCallback);
