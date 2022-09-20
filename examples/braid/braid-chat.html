@@ -1,10 +1,10 @@
 <!-- hello-chat.html -->
-<hello-chat room="http://invisible.college:3007/messages"></hello-chat>
+<braid-chat room="http://invisible.college:3007/messages"></braid-chat>
 
 <script type="module">
   import tag, { signal } from '../../mod.js'
 
-  const $ = tag('hello-chat', { name: "Default Name" })
+  const $ = tag('braid-chat', { name: "Braid User" })
 
   function initialize(target) {
     if(target.initialized) return
