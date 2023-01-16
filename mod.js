@@ -1,7 +1,9 @@
 import "./src/vendor/statebus/statebus.js"
 import "./src/vendor/statebus/client-library.js"
 import "./src/vendor/statebus/braidify-client.js"
-import { innerHTML } from 'https://esm.sh/diffhtml?bundle'
+import diffHTML from 'https://esm.sh/diffhtml?bundle'
+
+const { innerHTML } = diffHTML
 
 // optimally, we'll import just bus from statebus and everything else will be implemented under the hood. stubbing for now to unblock development using tag
 const bus = window.bus
