@@ -1,6 +1,5 @@
 import diffHTML from 'https://esm.sh/diffhtml?bundle'
 
-const noop = () => null
 const CREATE_EVENT = 'create'
 
 const observableEvents = [CREATE_EVENT]
@@ -8,7 +7,10 @@ const observableEvents = [CREATE_EVENT]
 const reactiveFunctions = {}
 
 function react(link) {
-  (reactiveFunctions[link] || noop)()
+  if(!reactiveFunctions[link]) return
+
+  Object.keys(reactiveFunctions[link])
+    .map(id => reactiveFunctions[link][id]())
 }
 
 const notifications = {
@@ -28,9 +30,13 @@ function update(target, compositor) {
 }
 
 function draw(link, compositor) {
+  if(!reactiveFunctions[link]) {
+    reactiveFunctions[link] = {}
+  }
+
   listen(CREATE_EVENT, link, (event) => {
     const draw = update.bind(null, event.target, compositor)
-    reactiveFunctions[link] = draw
+    reactiveFunctions[link][event.target.id] = draw
     draw()
   })
 }
