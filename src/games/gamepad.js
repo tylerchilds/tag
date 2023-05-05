@@ -56,6 +56,7 @@ function renderGamepads(_target, $) {
 }
 
 function gamepadLoop(time) {
+  scanGamepads()
   const ids = Object.keys(controllers) || []
 
 	const gamepads = ids
@@ -65,6 +66,15 @@ function gamepadLoop(time) {
   $.teach({ time, gamepads })
 
   requestAnimationFrame(gamepadLoop);
+}
+
+function scanGamepads() {
+  const gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+  for (let i = 0; i < gamepads.length; i++) {
+    if (gamepads[i] && (gamepads[i].index in controllers)) {
+        controllers[gamepads[i].index] = gamepads[i];
+    }
+  }
 }
 
 function gatherInputs(gamepad, _index) {
