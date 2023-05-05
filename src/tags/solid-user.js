@@ -14,11 +14,11 @@ const $ = tag('solid-user', {
 })
 
 restoreSession().then(user => {
-  $.write({ user, loading: false });
+  $.teach({ user, loading: false });
 })
 
-$.render(() => {
-  const { user, loading } = $.read()
+$.draw(() => {
+  const { user, loading } = $.learn()
 
   if(loading) return `Loading...`
 
@@ -39,7 +39,7 @@ $.render(() => {
   `
 })
 
-$.on('click', '#login-button', () => {
+$.when('click', '#login-button', () => {
   const loginUrl = getLoginUrl();
 
   if (!loginUrl)
@@ -48,7 +48,7 @@ $.on('click', '#login-button', () => {
   performLogin(loginUrl);
 })
 
-$.on('click', '#logout-button', async () => {
+$.when('click', '#logout-button', async () => {
   await performLogout();
 })
 
@@ -129,7 +129,7 @@ function performLogin(loginUrl) {
 }
 
 async function performLogout() {
-  $.write({ user: null })
+  $.teach({ user: null })
   await solidClientAuthentication.logout();
 }
 
@@ -208,4 +208,4 @@ function escapeText(text) {
   return text.replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
 }
 
-window.onbeforeunload = () => $.write({ user: null })
+window.onbeforeunload = () => $.teach({ user: null })

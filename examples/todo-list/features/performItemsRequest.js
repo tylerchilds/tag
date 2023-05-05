@@ -1,7 +1,7 @@
 import { web } from '../../../src/tags/solid-user.js'
 
 export default async function performItemsRequest($) {
-  const { itemsContainerUrl } = $.read()
+  const { itemsContainerUrl } = $.learn()
   // In a real application, you shouldn't hard-code the path to the container like we're doing here.
   // Read more about this in the comments on the performTaskCreation function.
 

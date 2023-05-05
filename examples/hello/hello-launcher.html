@@ -49,22 +49,22 @@
   }
 
   export function launcherById(id) {
-    return $.read()[id] || emptyLauncher
+    return $.learn()[id] || emptyLauncher
   }
 
   const strictModes = [modes.welcome, modes.alias, modes.home]
   const paginationActions = [actions.back, actions.next]
 
-  $.on('click', '.next', action(actions.next))
-  $.on('click', '.back', action(actions.back))
+  $.when('click', '.next', action(actions.next))
+  $.when('click', '.back', action(actions.back))
 
-  $.on('click', '.welcome', goTo(modes.welcome))
-  $.on('click', '.home', goTo(modes.home))
-  $.on('click', '.store', goTo(modes.store))
-  $.on('click', '.download', goTo(modes.download))
-  $.on('click', '.settings', goTo(modes.settings))
+  $.when('click', '.welcome', goTo(modes.welcome))
+  $.when('click', '.home', goTo(modes.home))
+  $.when('click', '.store', goTo(modes.store))
+  $.when('click', '.download', goTo(modes.download))
+  $.when('click', '.settings', goTo(modes.settings))
 
-  $.render(target => {
+  $.draw(target => {
     const { id } = target
 
     const launcher = launcherById(id)
@@ -173,14 +173,14 @@
 
     const currentMode = nextMode ? nextMode : mode
     const previousMode = mode !== backMode ? backMode : mode
-    $.write({ mode: currentMode, backMode: previousMode }, merge(id))
+    $.teach({ mode: currentMode, backMode: previousMode }, merge(id))
     target.scrollTop = '0'
     document.activeElement.blur()
   }
 
-  $.on('animationend', 'transition', transition)
+  $.when('animationend', 'transition', transition)
 
-  $.style(`
+  $.flair(`
     & {
       background: white;
       display: block;
@@ -343,7 +343,7 @@
     }
   `)
 
-  $.style(`
+  $.flair(`
     /* global styles */
     .card {
       background: white;
@@ -382,7 +382,7 @@
     const { action } = message
 
     function setMode(nextMode) {
-      $.write({ nextMode }, merge(id))
+      $.teach({ nextMode }, merge(id))
     }
 
     if(action === actions.goto) {

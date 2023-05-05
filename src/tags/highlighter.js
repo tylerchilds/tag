@@ -7,7 +7,7 @@ export default function highlight(string, color = defaultColor) {
   return `<highlighter color="${color}">${string}</highlighter>`
 }
 
-$.render((target) => {
+$.draw((target) => {
   const color = target.getAttribute('color') || defaultColor
 
   if(!target.css) {
@@ -22,14 +22,14 @@ $.render((target) => {
         transform: rotate(${n(1, -7, 7, 'deg')}) scale(${n(1, .95, 1.1)});
       }
     `
-    $.style(target.css)
+    $.flair(target.css)
     target.html = `<span>${target.innerHTML}</span>`
   }
 
   return target.html
 })
 
-$.style(`
+$.flair(`
   & {
     display: inline-block;
     position: relative;

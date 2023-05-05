@@ -13,7 +13,7 @@ import {
   javascript
 } from "https://esm.sh/@codemirror/lang-javascript"
 import tag
-  from "https://thelanding.page/tag/tag.js"
+  from "../../mod.js"
 
 const editors = {}
 
@@ -34,11 +34,11 @@ const config = {
 }
 
 function mount($, flags) {
-  $.render(target => {
+  $.draw(target => {
     // not ready or already initialized, quit
     if(editors[target.id]) return
 
-    const initialState = $.read()
+    const initialState = $.learn()
     const copy = initialState[target.id] || {}
 
     const state = EditorState.create({
@@ -65,7 +65,7 @@ function autosave($, { every }) {
   setInterval(() => each($, save), every * 1000)
 
   function save(target) {
-		const currentState = $.read()
+		const currentState = $.learn()
 		const copy = currentState[target.id]
 
     // persist to some back up location
@@ -81,7 +81,7 @@ function persist(target, $, flags) {
 		const { view } = editors[id]
 		const value = view.state.doc.toString()
 		view.update([transaction])
-		$.write({ [id]: { value }})
+		$.teach({ [id]: { value }})
 	}
 }
 

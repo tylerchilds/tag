@@ -17,7 +17,7 @@ export default function onItemChange($, flags) {
     })
   }
 
-  $.on(
+  $.when(
     'keypress',
     '[data-change-id]',
     (event) => {
@@ -27,7 +27,7 @@ export default function onItemChange($, flags) {
     }
   )
 
-  $.on(
+  $.when(
     'blur',
     '[data-change-id]',
     (event) => changeItemHandler($, event)

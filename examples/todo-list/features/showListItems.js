@@ -3,7 +3,7 @@ export default function showListItems($, flags = {}) {
   if(!flags.filterOrdered) return
 
   // grab the filter and items state
-  const { filter, items } = $.read()
+  const { filter, items } = $.learn()
   const [ALL, ACTIVE, COMPLETED] = flags.filterOrdered
 
   // a callback function that determines if an item matches the current filter

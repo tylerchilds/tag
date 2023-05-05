@@ -1,9 +1,9 @@
 <!-- hello-gallery.html -->
 <hello-gallery>
-  <img src="https://www.fillmurray.com/600/400" alt="Bill Murray" />
-  <img src="https://www.fillmurray.com/650/400" alt="Bill" />
-  <img src="https://www.fillmurray.com/600/450" alt="Murray" />
-  <img src="https://www.fillmurray.com/650/450" alt="Fill Murray" />
+  <img src="https://fillmurray.lucidinternets.com/600/400" alt="Bill Murray" />
+  <img src="https://fillmurray.lucidinternets.com/650/400" alt="Bill" />
+  <img src="https://fillmurray.lucidinternets.com/600/450" alt="Murray" />
+  <img src="https://fillmurray.lucidinternets.com/650/450" alt="Fill Murray" />
 </hello-gallery>
 
 <script type="module">
@@ -17,10 +17,10 @@
   const $ = tag('hello-gallery')
 
   const galleryById = (id) => {
-    return $.read()[id] || emptyGallery
+    return $.learn()[id] || emptyGallery
   }
 
-  $.render((target) => {
+  $.draw((target) => {
     const { id } = target
     const { images, position } = galleryById(id)
 
@@ -44,10 +44,10 @@
     `
   })
 
-  $.on('click', '.back', step(-1))
-  $.on('click', '.next', step(+1))
+  $.when('click', '.back', step(-1))
+  $.when('click', '.next', step(+1))
 
-  $.style(`
+  $.flair(`
     & {
       display: block;
     }
@@ -72,7 +72,7 @@
 
       const index = mod((position + i), images.length)
 
-      $.write({
+      $.teach({
         id,
         position: index
       }, merge)
@@ -99,7 +99,7 @@
       .map(img => ({ src: img.src, alt: img.alt }));
 
     if(images.length > 0) {
-      $.write({ id, images }, merge)
+      $.teach({ id, images }, merge)
     }
   }
 

@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "start": "deno run --allow-read=. --allow-net --unstable .deno/server.js"
+  },
+  "compilerOptions": {
+  }
+}

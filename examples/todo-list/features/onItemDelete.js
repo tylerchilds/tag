@@ -11,7 +11,7 @@ export default function onItemDelete($) {
     deleteItem($, item)
   }
 
-  $.on(
+  $.when(
     'click',
     '[data-delete-id]',
     (event) => deleteItemHandler($, event)

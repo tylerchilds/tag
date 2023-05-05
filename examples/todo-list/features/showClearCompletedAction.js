@@ -1,7 +1,7 @@
 // a helper function for rendering the clear and complete actions
 export default function showClearCompletedAction($) {
   // grab the items state
-  const { items } = $.read()
+  const { items } = $.learn()
   const button = `
     <button data-clear-completed class="clear-completed">
       Clear completed

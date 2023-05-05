@@ -15,7 +15,7 @@ export default function onItemToggle($) {
     })
   }
 
-  $.on(
+  $.when(
     'click',
     '[data-toggle-id]',
     (event) => toggleItemHandler($, event)

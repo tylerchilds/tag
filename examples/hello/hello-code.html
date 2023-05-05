@@ -11,16 +11,16 @@
 </div>
 
 <script type="module">
-  import tag from './tag.js'
+  import tag from '../../mod.js'
 
   const emptyEditor = {
     delta: {},
     rawHTML: ""
   }
 
-  const { html, get, set } = tag('hello-code')
+  const $ = tag('hello-code')
 
-  html(target => {
+  $.draw(target => {
     const { key, mode } = target.dataset
     const { contents } = editorByKey(key)
 
@@ -49,13 +49,13 @@
       const delta = target.editor.getContents()
       const rawHTML = target.editor.root.innerHTML
 
-      set({
+      $.teach({
         [key]: { delta, rawHTML }
       })
     }
   }
 
   export function editorByKey(key) {
-    return get()[key] || emptyEditor
+    return $.learn()[key] || emptyEditor
   }
 </script>

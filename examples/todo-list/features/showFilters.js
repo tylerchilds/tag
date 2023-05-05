@@ -2,7 +2,7 @@ export default function showFilters($, flags = {}) {
   if(!flags.filterOrdered) return
 
   // get the filter state
-  const { filter } = $.read()
+  const { filter } = $.learn()
 
   // a render helper to generate a button from a key
   const render = (key) => `

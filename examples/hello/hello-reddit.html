@@ -32,7 +32,7 @@
   import tag from '../../mod.js'
 
   const emptyReddit = {
-    chilren: [],
+    children: [],
     after: "",
     before: ""
   }
@@ -40,13 +40,13 @@
   const $ = tag('hello-reddit')
 
   function redditById(id) {
-    return $.read()[id] || emptyReddit
+    return $.learn()[id] || emptyReddit
   }
 
-  $.on('click', '.reset', paginate('reset'))
-  $.on('click', '.more', paginate('after'))
+  $.when('click', '.reset', paginate('reset'))
+  $.when('click', '.more', paginate('after'))
 
-  $.render(target => {
+  $.draw(target => {
     const title = target.getAttribute('title') || 'Untitled'
     const { children = [], loading } = query(target)
 
@@ -100,7 +100,7 @@
     return (renderers[data.post_hint] || renderers['default'])(data)
   }
 
-  $.style(`
+  $.flair(`
     & {
       border: 1px solid black;
       border-radius: 2px;
@@ -162,7 +162,7 @@
       await fetch(url)
         .then(res => res.json())
         .then(json => json.data)
-        .then(response => $.write({
+        .then(response => $.teach({
           ...response,
           loading: false
         }, merge(target.id)))
@@ -177,7 +177,7 @@
         ? `&${key}=${state[key]}`
         : ''
 
-      $.write({ paginate: query, loading: true }, merge(id))
+      $.teach({ paginate: query, loading: true }, merge(id))
       document.getElementById(id)
         .querySelector('ol').scrollTop = '0'
     }

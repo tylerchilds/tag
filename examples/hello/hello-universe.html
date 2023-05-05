@@ -91,13 +91,13 @@
 
     // increase our tick twice a second (once every 500 milliseconds)
     setInterval(function tick() {
-      const { tick } = $.read()
-      $.write({ tick: tick + 1 })
+      const { tick } = $.learn()
+      $.teach({ tick: tick + 1 })
     }, 500)
 
-    $.render(() => {
+    $.draw(() => {
       // pluck our current values from our current state
-      const { planets, tick, showAdmin } = $.read()
+      const { planets, tick, showAdmin } = $.learn()
 
       if(!planets) return
       // get the current planet by modulo of current tick by # of planets
@@ -129,15 +129,15 @@
     })
 
     // toggle the showAdmin variable on button click
-    $.on('click', 'button.admin-toggle', () => {
-      const showAdmin = ! $.read().showAdmin
-      $.write({ showAdmin })
+    $.when('click', 'button.admin-toggle', () => {
+      const showAdmin = ! $.learn().showAdmin
+      $.teach({ showAdmin })
     })
 
     // create a random planet with the current tick as a seed
-    $.on('click', 'button.add-planet', () => {
-      const { tick } = $.read()
-      $.write({
+    $.when('click', 'button.add-planet', () => {
+      const { tick } = $.learn()
+      $.teach({
         id: `planet-${tick}`,
         name: `Planet ${tick}`,
         background: 'cornsilk'
@@ -156,11 +156,11 @@
     }
 
     // update planet information when input values have been changed
-    $.on('keyup', 'admin input', (event) => {
+    $.when('keyup', 'admin input', (event) => {
       const { value, dataset } = event.target
       const { id, attribute } = dataset
 
-      $.write({
+      $.teach({
         id,
         attribute,
         value
@@ -169,7 +169,7 @@
 
     // return the index of the planet with a given id
     function getPlanetIndexById(id) {
-      const index = $.read().planets
+      const index = $.learn().planets
         .findIndex(x => x.id === id)
 
       return index
@@ -216,7 +216,7 @@
     }
 
     // create scoped rulesets for all of our content
-    $.style(`
+    $.flair(`
       & {
         display: block;
         margin: 0 auto;

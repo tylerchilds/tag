@@ -1,7 +1,7 @@
-import tag from 'https://thelanding.page/tag/tag.js'
+import tag from '../../mod.js'
 import handleKonami from './konami-kid.js'
 
-const { html, css } = tag('developer-tools')
+const $ = tag('developer-tools')
 
 function once(setup) {
   const noop = () => null
@@ -10,7 +10,7 @@ function once(setup) {
   }
 }
 
-html(once((target) => {
+$.draw(once((target) => {
   target.mounted = true
   return `
     ${target.innerHTML}
@@ -31,7 +31,7 @@ html(once((target) => {
   `
 }))
 
-css(`
+$.flair(`
   developer-tools {
     background: cornsilk;
     border: .5em solid goldenrod;

@@ -17,6 +17,6 @@ export default function deleteItem($, item) {
   }
 
   // remove the item from the item state
-  $.write(item, handler)
+  $.teach(item, handler)
   performItemDeletion($, item)
 }

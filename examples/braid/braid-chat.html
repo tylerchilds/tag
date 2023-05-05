@@ -2,22 +2,21 @@
 <braid-chat room="http://invisible.college:3007/messages"></braid-chat>
 
 <script type="module">
-  import tag, { signal } from '../../mod.js'
+  import "../../src/vendor/statebus/statebus.js"
+  import "../../src/vendor/statebus/client-library.js"
+  import "../../src/vendor/statebus/braidify-client.js"
+  import tag from '../../mod.js'
+
+  // optimally, we'll import just bus from statebus and everything else will be implemented under the hood. stubbing for now to unblock development using tag
+  const bus = window.bus
+  window.braid_fetch = window.fetch
 
   const $ = tag('braid-chat', { name: "Braid User" })
-
-  function initialize(target) {
-    if(target.initialized) return
-    $.write({ room: target.getAttribute('room') })
-    target.initialized = true
-  }
-
-  $.render(target => {
+  const hotDraw = bus.reactive(function draw(target) {
     initialize(target)
+    const { name, room } = $.learn()
 
-    const { name, room } = $.read()
-
-    const messages = signal(room) || []
+    const messages = bus.state[room] || []
 
     const log = messages.map(({ from, body }) => `
       <div>${from}: ${body}</div>
@@ -32,19 +31,35 @@
       </form>
     `
   })
+  $.draw(hotDraw)
 
-  $.on('change', '[name="name"]', (event) => {
-    $.write({
+  function once(setup) {
+    const noop = () => null
+    return function(target) {
+      return target.dataset.initialized ? noop() : setup(target)
+    }
+  }
+
+  function initialize(target) {
+    if(target.dataset.initialized) return
+    target.dataset.initialized = true
+    setTimeout(() => {
+      $.teach({ room: target.getAttribute('room') })
+    }, 1)
+  }
+
+  $.when('change', '[name="name"]', (event) => {
+    $.teach({
       name: event.target.value
     })
   })
 
-  $.on('submit', 'form', (event) => {
+  $.when('submit', 'form', (event) => {
     event.preventDefault()
-    const { name, room } = $.read()
+    const { name, room } = $.learn()
     const { value } = event.target.message
 
-    const messages = signal(room) || []
+    const messages = bus.state[room] || []
 
     messages.push({
       from: name,

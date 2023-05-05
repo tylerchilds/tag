@@ -11,9 +11,9 @@
     'name': 'Earth'
   })
 
-  $.render(() => {
+  $.draw(() => {
     // get the name from current state
-    const { name } = $.read()
+    const { name } = $.learn()
 
     // interpolate the name variable into tag content
     return `Hello ${name}`

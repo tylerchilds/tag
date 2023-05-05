@@ -139,7 +139,7 @@
     Hello World is a common program to write when first learning something new. The code below imports <code>tag.js</code>, creates a custom tag, and sets the content to 'Hello World!'
     </p>
     <pre><xmp>import tag from 'https://deno.land/x/tag'
-tag('hello-world').render(() => 'Hello World!')</xmp></pre>
+tag('hello-world').draw(() => 'Hello World!')</xmp></pre>
 
     <p><em>
       <strong>Tip!</strong> View the source of the example page to see &lt;hello-world&gt; in action!
@@ -157,23 +157,23 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     It will return an object with the selector as an attribute and the following namespaced functions.
     </p>
     <dl>
-      <dt><code>$.render(function(target: EventTarget))</code></dt>
+      <dt><code>$.draw(function(target: EventTarget))</code></dt>
       <dd>
       Expects a function that returns HTML as a string to be rendered into the provided target. A falsey return will leave the target node untouched. This function will be invoked whenever state changes.
       </dd>
-      <dt><code>$.style(stylesheet: string)</code></dt>
+      <dt><code>$.flair(stylesheet: string)</code></dt>
       <dd>
       Expects a CSS stylesheet as a string. The ampersand (&amp;) symbol may be used to scope rulesets.
       </dd>
-      <dt><code>$.on(eventType: string, selector: string, function(event)) : function</code></dt>
+      <dt><code>$.when(eventType: string, selector: string, function(event)) : function</code></dt>
       <dd>
       An event delegator that expects three arguments. A css selector, and a handler. No selector will listen on the tag's root. Returns a function to remove the listener when invoked.
       </dd>
-      <dt><code>$.read() : object</code></dt>
+      <dt><code>$.learn() : object</code></dt>
       <dd>
       Returns the current state.
       </dd>
-      <dt><code>$.write(payload [, function(state, payload)])</code></dt>
+      <dt><code>$.teach(payload [, function(state, payload)])</code></dt>
       <dd>
       Merges the payload into the current state. An optional second argument for managing the state update may be provided. That function will be called with the current state and the payload. It expects the reconciled, complete state to be returned
       </dd>
@@ -202,8 +202,8 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     'name': 'Earth'
   })
 
-  $.render(() => {
-    const { name } = read()
+  $.draw(() => {
+    const { name } = learn()
 
     return `Hello ${name}`
   })
@@ -258,23 +258,26 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
       The foundation for a minimal window manager using a CSS stylesheet that replicates <a href="https://khang-nd.github.io/7.css/">Windows 7</a>.
       </dd>
 
-      <!-- solid-user -->
+      <!-- solid-user
       <dt><code>&lt;solid-user&gt;</code> <a href="./solid/solid-user.html">View Example</a></dt>
       <dd>
       A  <a href="https://solidproject.org">Solid POD</a> authenticator. This allows people to connect to their preferred identity provider.
       </dd>
+      -->
 
-      <!-- todo-list -->
+      <!-- todo-list
       <dt><code>&lt;todo-list&gt;</code> <a href="./todo-list/index.html">View Example</a></dt>
       <dd>
       A <a href="https://todomvc.com/">TodoMVC</a> application that utilizes <a href="https://solidproject.org">Solid</a> as a backend.
       </dd>
+      -->
 
-      <!-- braid-chat -->
-      <dt><code>&lt;braid-chat&gt;</code> <a href="javascript:window.location.href='http://'+window.location.host+window.location.pathname.replace(/[^\/]*$/,'')+'braid/braid-chat.html';">View Example</a></dt>
+      <!-- braid-chat
+      <dt><code>&lt;braid-chat&gt;</code> <a href="./braid/braid-chat.html">View Example</a></dt>
       <dd>
       A <a href="https://braid.org/">Braid.org</a> application that syncs with a <a href="http://invisible.college:3007/messages">/messages backend</a>.
       </dd>
+      -->
 
     </dl>
 
@@ -337,17 +340,17 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
     <script type="module">
       import tag from '../mod.js'
 
-      tag('#details-link').on('click', '', openAccordion)
+      tag('#details-link').when('click', '', openAccordion)
 
       const accordion = tag('details')
 
-      accordion.on('click', 'summary', function toggle() {
-        const { open } = accordion.read()
-        accordion.write({ open: ! open })
+      accordion.when('click', 'summary', function toggle() {
+        const { open } = accordion.learn()
+        accordion.teach({ open: ! open })
       })
 
       function openAccordion () {
-        accordion.write({ open: true })
+        accordion.teach({ open: true })
         document.querySelector(accordion.selector)
           .setAttribute('open', 'true')
       }
@@ -365,7 +368,7 @@ tag('hello-world').render(() => 'Hello World!')</xmp></pre>
           default: guitarHero
         } = await import('../src/games/guitar-hero.js')
 
-        guitarHero.style(`
+        guitarHero.flair(`
           * {
             box-sizing: border-box;
             padding: 0;

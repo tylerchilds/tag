@@ -5,7 +5,7 @@ const initialState = {}
 
 const $ = tag('debug-gamepads', initialState)
 
-$.render((target) => renderGamepads(target, $))
+$.draw((target) => renderGamepads(target, $))
 
 function connecthandler(e) {
   const { index } = e.gamepad
@@ -42,7 +42,7 @@ function renderInputs(_$, flags) {
 }
 
 function renderGamepads(_target, $) {
-  const { gamepads } = $.read()
+  const { gamepads } = $.learn()
 
   const list = gamepads
     .map((gamepad, index) => `
@@ -62,7 +62,7 @@ function gamepadLoop(time) {
     .map(x => controllers[x])
     .map(gatherInputs)
 
-  $.write({ time, gamepads })
+  $.teach({ time, gamepads })
 
   requestAnimationFrame(gamepadLoop);
 }
@@ -90,7 +90,7 @@ function gatherInputs(gamepad, _index) {
 globalThis.addEventListener("gamepadconnected", connecthandler);
 globalThis.addEventListener("gamepaddisconnected", disconnecthandler);
 
-$.style(`
+$.flair(`
   & .gamepads {
     background: rgba(0,0,0,.04);
     border: 1px solid rgba(0,0,0,.1);

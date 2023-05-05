@@ -57,27 +57,27 @@
             resolve(has().user) 
           }
           requestAnimationFrame(() => check(has))
-        })($user.read)
+        })($user.learn)
       }).then(async (user) => {
-        const { itemsContainerUrl } = $.read();
+        const { itemsContainerUrl } = $.learn();
 
         if(!itemsContainerUrl) {
           const url = await web.createContainer(
             `${user.storageUrl}items/`
           );
 
-          $.write({ itemsContainerUrl: url });
+          $.teach({ itemsContainerUrl: url });
         }
 
         const items = await performItemsRequest($);
-        $.write({ items, loading: false });
+        $.teach({ items, loading: false });
       })
 
       // html is a render function; if a string is returned, it is rendered
       // whenever state changes, the render function will be called on each target
-      $.render((target) => {
-        const { loading } = $.read();
-        const { user, loading: userLoading } = $user.read()
+      $.draw((target) => {
+        const { loading } = $.learn();
+        const { user, loading: userLoading } = $user.learn()
 
         if(loading || userLoading) {
           return `Loading...`

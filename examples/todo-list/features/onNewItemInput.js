@@ -18,7 +18,7 @@ export default function onNewItemInput($, flags = {}) {
     }
   }
 
-  $.on(
+  $.when(
     'keypress',
     '[data-new-item-input]',
     function (event) { newItemHandler($, event) }

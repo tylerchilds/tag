@@ -7,8 +7,8 @@
     'nickname': 'Earthling'
   })
 
-  $.render(() => {
-    const { nickname } = $.read()
+  $.draw(() => {
+    const { nickname } = $.learn()
 
     return `
       <demo>
@@ -21,12 +21,12 @@
     `
   })
 
-  $.on('keyup', 'input', event => {
+  $.when('keyup', 'input', event => {
     const nickname = event.target.value;
-    $.write({ nickname })
+    $.teach({ nickname })
   })
 
-  $.style(`
+  $.flair(`
     & {
       display: block;
       margin: 0 auto;

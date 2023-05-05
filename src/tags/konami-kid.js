@@ -32,11 +32,11 @@ const $ = tag('konami-kid')
 
 function defaultHack() {
   document.body.innerHTML = '<konami-kid></konami-kid>'
-  $.write({ boop: true })
+  $.teach({ boop: true })
   handleKonami(start)
 }
 
-$.render(target => {
+$.draw(target => {
   return `
     <section class="layout">
       <div class="horizon"></div>

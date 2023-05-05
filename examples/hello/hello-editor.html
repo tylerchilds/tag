@@ -23,7 +23,7 @@
 
   const $ = tag('hello-editor')
 
-  $.render(target => {
+  $.draw(target => {
     const { key, mode } = target.dataset
     const { delta, rawHTML } = editorByKey(key)
 
@@ -52,13 +52,13 @@
       const delta = target.editor.getContents()
       const rawHTML = target.editor.root.innerHTML
 
-      $.write({
+      $.teach({
         [key]: { delta, rawHTML }
       })
     }
   }
 
   export function editorByKey(key) {
-    return $.read()[key] || emptyEditor
+    return $.learn()[key] || emptyEditor
   }
 </script>

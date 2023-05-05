@@ -16,7 +16,7 @@ export default async function createItem($, flags) {
   }
 
   // add the new item to the items state
-  $.write({
+  $.teach({
     ...item,
     editing: false,
   }, handler)

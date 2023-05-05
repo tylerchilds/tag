@@ -1,6 +1,6 @@
 // a render helper for returning the number of tasks remaining
 export default function showIncompleteCount($) {
-  const { items } = $.read()
+  const { items } = $.learn()
   const incomplete = items.filter(x => !x.completed)
   return `
     <span class="todo-count">

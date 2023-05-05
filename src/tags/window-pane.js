@@ -23,7 +23,7 @@ export default function createWindowPane(id, title, content) {
 
 // Return a pane based on an id
 const paneById = (id) => {
-  return $.read()[id] || {
+  return $.learn()[id] || {
     id,
     content: '',
     grabbed: false,
@@ -48,7 +48,7 @@ const update = (target, payload) => {
 }
 
 // render html on state change
-$.render(target => {
+$.draw(target => {
   if(!target.renderable) load(target)
 
   const { title, content, grabbed, maximized, x, y, z } = paneByTarget(target)
@@ -82,10 +82,10 @@ $.render(target => {
 })
 
 // bind actions for title bar controls
-$.on('click', '[aria-label="Minimize"]', minimize)
-$.on('click', '[aria-label="Maximize"]', maximize)
-$.on('click', '[aria-label="Restore"]', restore)
-$.on('click', '[aria-label="Close"]', close)
+$.when('click', '[aria-label="Minimize"]', minimize)
+$.when('click', '[aria-label="Maximize"]', maximize)
+$.when('click', '[aria-label="Restore"]', restore)
+$.when('click', '[aria-label="Close"]', close)
 
 // minimize a pane
 function minimize({ target }) {
@@ -108,18 +108,18 @@ function close({ target }) {
 }
 
 // bind actions for title bar movement
-$.on('mousedown', '.title-bar', grab)
-$.on('mousemove', '.title-bar', drag)
-$.on('mouseup', '.title-bar', ungrab)
-$.on('mouseout', '.title-bar', ungrab)
+$.when('mousedown', '.title-bar', grab)
+$.when('mousemove', '.title-bar', drag)
+$.when('mouseup', '.title-bar', ungrab)
+$.when('mouseout', '.title-bar', ungrab)
 
 // grab a pane
 function grab({ target }) {
-  const { z } = $.read()
+  const { z } = $.learn()
   const newZ = z + 1
 
   update(target, { grabbed: true, z: newZ })
-  $.write({ z: newZ })
+  $.teach({ z: newZ })
 }
 
 // drag a pane
@@ -141,7 +141,7 @@ function ungrab({ target }) {
 }
 
 // establish scoped css overrides
-$.style(`
+$.flair(`
   & .window {
     transition: width 250ms ease-in-out;
     transform: translate(var(--x), var(--y));
@@ -188,7 +188,7 @@ async function load(target) {
 
 // manage nested state merge for surgically updating a single pane
 function setState(pane, payload) {
-  $.write(payload, function merge(state) {
+  $.teach(payload, function merge(state) {
     return {
       ...state,
       [pane.id]: {

@@ -18,10 +18,10 @@
 
   const $ = tag('hello-map', { center: coordinates[1], count: 0 })
 
-  $.render(draw)
+  $.draw(draw)
 
   function initialize(target) {
-    const { center } = $.read()
+    const { center } = $.learn()
     const container = document.createElement('div')
     container.classList.add('map')
     target.appendChild(container)
@@ -42,9 +42,9 @@
   }
 
   async function jump() {
-    const count = $.read().count + 1
+    const count = $.learn().count + 1
 
-    $.write({
+    $.teach({
       center: coordinates[mod(count, coordinates.length)],
       count
     })
@@ -54,7 +54,7 @@
     if(!target.map) initialize(target)
 
     if(!!target.map.getSource) {
-      const { center } = $.read()
+      const { center } = $.learn()
 
       target.map.flyTo({
         center,
@@ -63,7 +63,7 @@
     }
   }
 
-  $.style(`
+  $.flair(`
     body { margin: 0; padding: 0; }
 
     & {

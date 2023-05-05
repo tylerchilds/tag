@@ -22,7 +22,7 @@ export default function updateItem($, item) {
   }
 
   // update the item in the item state
-  $.write(item, handler)
+  $.teach(item, handler)
 
   performItemUpdation($, item)
 }

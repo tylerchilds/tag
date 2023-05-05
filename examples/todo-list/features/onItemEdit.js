@@ -13,7 +13,7 @@ export default function onItemEdit($) {
     })
   }
 
-  $.on(
+  $.when(
     'dblclick',
     '[data-edit-id]',
     (event) => editItemHandler($, event)

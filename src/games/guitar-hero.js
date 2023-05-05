@@ -1,5 +1,5 @@
 import * as Tone from 'https://esm.sh/tone@next'
-import tag from 'https://thelanding.page/tag/tag.bundle.js'
+import tag from '../../mod.js'
 import gamepad from "./gamepad.js"
 
 const synth = new Tone.Synth().toDestination()
@@ -93,12 +93,12 @@ const shades = {
 function ready() {
   return new Promise((ready) => {
     (function loop() {
-      if($.read().ready) {
+      if($.learn().ready) {
         return ready()
       }
 
-      if(gamepad.read().gamepads) {
-        $.write({ ready: true })
+      if(gamepad.learn().gamepads) {
+        $.teach({ ready: true })
         return ready()
       }
 
@@ -109,7 +109,7 @@ function ready() {
 
 (async function loop(time) {
   await ready()
-  const { gamepads } = gamepad.read()
+  const { gamepads } = gamepad.learn()
 
   const activeFrets = gamepads.map(x => toFrets($, x))
   const activeChords = activeFrets.map(x => toChords($, x))
@@ -124,7 +124,7 @@ function ready() {
     shades: activeShades[i]
   }))
 
-  $.write({
+  $.teach({
     time,
     activeFrets,
     activeChords,
@@ -155,13 +155,13 @@ function ready() {
   requestAnimationFrame(loop)
 })()
 
-$.render(() => {
+$.draw(() => {
   const {
     activeChords,
     activeNotes,
     activeStrums,
     activeThemes
-  } = $.read()
+  } = $.learn()
 
   const classes = (i) => `note ${activeStrums[i] ? 'strummed' : ''}`
   const styles = (i) => {
@@ -233,12 +233,12 @@ function isStrummed(value) {
 }
 
 function throttle($, flags) {
-  const { frames = {}} = $.read()
+  const { frames = {}} = $.learn()
   const frame = frames[flags.key] || {}
 
   if((flags.time - flags.fps) > (frame.time || 0)) {
     flags.activate()
-    $.write({ time: flags.time }, (state, payload) => {
+    $.teach({ time: flags.time }, (state, payload) => {
       return {
         ...state,
         frames: {
@@ -263,7 +263,7 @@ function playNote(_$, flags) {
   `
 }
 
-$.style(`
+$.flair(`
   & {
     display: grid;
     grid-template-columns: 1fr 1fr;

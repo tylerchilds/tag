@@ -2,7 +2,7 @@ import { web } from '../../../src/tags/solid-user.js'
 
 export default async function performItemCreation($, flags) {
   const { description } = flags
-  const { itemsContainerUrl } = $.read();
+  const { itemsContainerUrl } = $.learn();
   // Data discovery mechanisms are still being defined in Solid, but so far it is clear that
   // applications should not hard-code the url of their containers like we are doing in this
   // example.

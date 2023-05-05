@@ -1,7 +1,7 @@
 import tag from '../../mod.js'
 const $ = tag('rainbow-button')
 
-$.style(`
+$.flair(`
   @keyframes rainbow-background {
     0% {
       background: orange;
